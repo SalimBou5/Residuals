@@ -1,0 +1,96 @@
+{
+  "status": "CANDIDATE_ONLY_NOT_DYNAMICS_VALIDATED",
+  "subject": "S072",
+  "trial": "Trial02",
+  "step": "step01",
+  "t0_s": 5.11,
+  "t1_s": 6.16,
+  "frames": 106,
+  "stride_duration_s": 1.0499999999999998,
+  "mean_speed_est_m_s": 1.3615032584654927,
+  "speed_method": "magnitude horizontal OpenSim pelvis displacement / stride duration; not directly measured walking speed",
+  "timing": "original samples and durations preserved; phases added without temporal resampling",
+  "phase_boundary": "dataset right-HS-to-right-HS segmentation, see Boo et al 2025",
+  "contacts_by_plate": {
+    "1": {
+      "starts_loaded": true,
+      "ends_loaded": false,
+      "number_threshold_crossings": 1
+    },
+    "2": {
+      "starts_loaded": true,
+      "ends_loaded": false,
+      "number_threshold_crossings": 1
+    }
+  },
+  "events_warning": "20N crossing only if observable; force plate zero is not foot airborne; foot side from CoP relative to heel/toe markers",
+  "mapping": {
+    "pelvis": "OpenSim intrinsic ZXY; T transform to MuJoCo",
+    "sign_reversed": [
+      "knee_angle_r",
+      "knee_angle_l",
+      "hip_adduction_l",
+      "hip_rotation_l"
+    ],
+    "other_leg_signs": "unchanged",
+    "dependent_knee": "MuJoCo equality polynomials"
+  },
+  "s011_subtalar_flag": false,
+  "max_equality_residual": 0.0,
+  "independent_joint_limit_warnings": [],
+  "input_sha256": {
+    "joint_mot": "1cec95508e7492db9b9363c8989470edc02d09dc117d827011d9fb04fcb753e8",
+    "grf_mot": "3374087bfbbe80cc6cca5107166baf460707eb13e553a6883c5c909258530b5f",
+    "trc": "82d7ceee271b04adbfb99315de820ac95abebd7e6aca421084d21f6030e86995"
+  },
+  "heading_alignment": {
+    "original_heading_deg_from_plus_x": 90.72678670403087,
+    "applied_world_z_yaw_deg": -0.7267867040308741,
+    "initial_root_xy_m_in_original_mujoco_frame": [
+      0.19749826,
+      0.66269765
+    ],
+    "horizontal_displacement_m": 1.429578421388767,
+    "target_direction": "+y",
+    "operation": "Single rigid world-frame yaw per stride; root XY reset to (0,0)",
+    "joint_coordinates_changed": false,
+    "original_grf_and_marker_frame": "Original OpenSim laboratory coordinates (NOT rotated)",
+    "original_events_and_phases": "Unchanged",
+    "qvel": "Recomputed from aligned qpos using MuJoCo mj_differentiatePos",
+    "source_reference_sha256": "48279b09756ee7029ea1109de601b195f2609eb3ef3ea3dbe1c06c865125fc7d",
+    "source_reference_path": "gait120_references_full\\S072\\Trial02\\step01.npz",
+    "note": "For comparisons with retained OpenSim-lab marker/GRF coordinates, apply the documented OpenSim-to-MuJoCo basis change and this yaw/origin transform."
+  },
+  "events": {
+    "method": "Boo et al 2025 (right foot): rising 20N vertical-GRF crossing=HS; falling=TO",
+    "stride_boundary": "Published right-HS-to-right-HS segmentation (not necessarily visible in cropped GRF)",
+    "stride_start_right_hs_s": 5.11,
+    "stride_end_right_hs_s": 6.16,
+    "right_hs_boundary_sources": [
+      "published_right_HS_segmentation",
+      "published_right_HS_segmentation"
+    ],
+    "left_hs_time_s": null,
+    "left_hs_source": "not_observed",
+    "left_hs_phase_in_right_stride": null,
+    "left_to_time_s": 5.204101425998,
+    "right_to_time_s": 5.742103071299,
+    "left_to_source": "observed_20N_crossing",
+    "right_to_source": "observed_20N_crossing",
+    "observed_left_toe_off_s": [
+      5.204101425998
+    ],
+    "observed_right_toe_off_s": [
+      5.742103071299
+    ]
+  },
+  "contact_event_rebuild": {
+    "status": "derived_from_npz_original_GRF_not_existing_event_CSV",
+    "paper_definition": "right HS / TO at 20 N vertical GRF (level walking)",
+    "additional_user_qc": "20 ms per plate refractory; S029/S115 false-HS exclusions; CoP side classification",
+    "no_estimated_events": true,
+    "left_side_events": "extra inferred from CoP-to-foot-markers; NOT explicitly described by paper",
+    "original_force_and_kinematics_unchanged": true,
+    "supersedes_legacy_event_annotations": true
+  }
+}

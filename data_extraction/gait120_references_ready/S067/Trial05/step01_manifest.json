@@ -1,0 +1,112 @@
+{
+  "status": "CANDIDATE_ONLY_NOT_DYNAMICS_VALIDATED",
+  "subject": "S067",
+  "trial": "Trial05",
+  "step": "step01",
+  "t0_s": 4.2,
+  "t1_s": 5.25,
+  "frames": 106,
+  "stride_duration_s": 1.0499999999999998,
+  "mean_speed_est_m_s": 1.2014432963104862,
+  "speed_method": "magnitude horizontal OpenSim pelvis displacement / stride duration; not directly measured walking speed",
+  "timing": "original samples and durations preserved; phases added without temporal resampling",
+  "phase_boundary": "dataset right-HS-to-right-HS segmentation, see Boo et al 2025",
+  "events": {
+    "stride_start_right_hs_s": 4.2,
+    "stride_end_right_hs_s": 5.25,
+    "right_hs_boundary_sources": [
+      "dataset_right_HS_boundary_inferred",
+      "dataset_right_HS_boundary_GRF_corrob"
+    ],
+    "left_hs_time_s": 4.705741952829,
+    "left_hs_source": "observed_20N_crossing",
+    "left_hs_phase_in_right_stride": 0.481659002694,
+    "observed_right_toe_off_s": [],
+    "observed_left_toe_off_s": [],
+    "left_to_time_s": 4.304209644374,
+    "right_to_time_s": 4.835168464869,
+    "left_to_phase_in_right_stride": 0.099247280356,
+    "right_to_phase_in_right_stride": 0.604922347495,
+    "left_to_phase_in_left_stride": 0.617588277662,
+    "left_to_source": "estimated_cohort_median",
+    "right_to_source": "estimated_cohort_median"
+  },
+  "contacts_by_plate": {
+    "1": {
+      "starts_loaded": false,
+      "ends_loaded": true,
+      "number_threshold_crossings": 1
+    },
+    "2": {
+      "starts_loaded": false,
+      "ends_loaded": true,
+      "number_threshold_crossings": 1
+    }
+  },
+  "events_warning": "20N crossing only if observable; force plate zero is not foot airborne; foot side from CoP relative to heel/toe markers",
+  "mapping": {
+    "pelvis": "OpenSim intrinsic ZXY; T transform to MuJoCo",
+    "sign_reversed": [
+      "knee_angle_r",
+      "knee_angle_l",
+      "hip_adduction_l",
+      "hip_rotation_l"
+    ],
+    "other_leg_signs": "unchanged",
+    "dependent_knee": "MuJoCo equality polynomials"
+  },
+  "s011_subtalar_flag": false,
+  "max_equality_residual": 0.0,
+  "independent_joint_limit_warnings": [],
+  "input_sha256": {
+    "joint_mot": "9f2d9d81bcfa7241a42a26385cf90f2d729b72c1f659a3fc52363e48604d8d3a",
+    "grf_mot": "326e2423abf581a649907bcc57cbae23233bf178783f24a88b7441dea64ec871",
+    "trc": "66fa0e3b2678f6f99aaa6ef7923d7f0f63c73d6bddee0c4e7d63eaadc34af9cb"
+  },
+  "heading_alignment": {
+    "original_heading_deg_from_plus_x": 88.52540574414843,
+    "applied_world_z_yaw_deg": 1.474594255851574,
+    "initial_root_xy_m_in_original_mujoco_frame": [
+      0.15724219,
+      -0.72317648
+    ],
+    "horizontal_displacement_m": 1.2615154611260102,
+    "target_direction": "+y",
+    "operation": "Single rigid world-frame yaw per stride; root XY reset to (0,0)",
+    "joint_coordinates_changed": false,
+    "original_grf_and_marker_frame": "Original OpenSim laboratory coordinates (NOT rotated)",
+    "original_events_and_phases": "Unchanged",
+    "qvel": "Recomputed from aligned qpos using MuJoCo mj_differentiatePos",
+    "source_reference_sha256": "76f15c8d303325304e5a9d3d70b2acda9aaa27f95a0c5e9a73890f2edf136108",
+    "source_reference_path": "gait120_references_full\\S067\\Trial05\\step01.npz",
+    "note": "For comparisons with retained OpenSim-lab marker/GRF coordinates, apply the documented OpenSim-to-MuJoCo basis change and this yaw/origin transform."
+  },
+  "event_finalization": {
+    "version": "1.0",
+    "method": "20 N observed GRF crossings, per-plate 20ms refractory, phase/QC gating, estimate missing TO from reliable cohort medians",
+    "raw_events_csv": "*_events.csv (copied unchanged; observations/candidates, not final events)",
+    "selected_events_csv": "*_selected_events.csv (one left HS, one left TO, one right TO, two right HS boundaries)",
+    "reference_event_phases_right_stride": {
+      "left_TO": 0.09924728035594195,
+      "right_TO": 0.6049223474945459
+    },
+    "original_selected_event_metadata_before_finalization": {
+      "stride_start_right_hs_s": 4.2,
+      "stride_end_right_hs_s": 5.25,
+      "right_hs_boundary_sources": [
+        "dataset_segmentation_right_HS_inferred",
+        "force_corrob_within_30ms"
+      ],
+      "left_hs_time_s": 4.7057419528288245,
+      "left_hs_source": "observed_20N_crossing_cop_labeled",
+      "left_hs_phase_in_right_stride": 0.48165900269411843,
+      "observed_right_toe_off_s": [],
+      "observed_left_toe_off_s": []
+    },
+    "suppressed_saved_crossing_count": 0,
+    "warnings": [],
+    "phase_arrays_updated_for_left_HS": true,
+    "qpos_qvel_original_grf_unchanged": true,
+    "estimates_are_not_measured": true
+  }
+}

@@ -1,0 +1,7 @@
+time_s,phase_right_01,foot_side,event,source,notes
+5.400000000,0.000000000,right,HS,boundary,start
+5.509081516,0.100074785,left,TO,observed,ground_force1_vy
+5.511016234,0.101849756,left,TO,observed,ground_force1_vy
+5.945000000,0.500000000,left,HS,estimated,ASSUMED_half_stride_shift_QC_outlier_not_measured
+6.069180001,0.613926607,right,TO,observed,ground_force2_vy
+6.490000000,1.000000000,right,HS,boundary,end

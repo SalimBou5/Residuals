@@ -1,0 +1,81 @@
+{
+  "status": "CANDIDATE_ONLY_NOT_DYNAMICS_VALIDATED",
+  "subject": "S090",
+  "trial": "Trial03",
+  "step": "step02",
+  "t0_s": 5.25,
+  "t1_s": 6.28,
+  "frames": 104,
+  "stride_duration_s": 1.0300000000000002,
+  "mean_speed_est_m_s": 1.212266225560443,
+  "speed_method": "magnitude horizontal OpenSim pelvis displacement / stride duration; not directly measured walking speed",
+  "timing": "original samples and durations preserved; phases added without temporal resampling",
+  "phase_boundary": "dataset right-HS-to-right-HS segmentation, see Boo et al 2025",
+  "events": {
+    "stride_start_right_hs_s": 5.25,
+    "stride_end_right_hs_s": 6.28,
+    "right_hs_boundary_sources": [
+      "dataset_segmentation_right_HS_inferred",
+      "dataset_segmentation_right_HS_inferred"
+    ],
+    "left_hs_time_s": 5.765000000000001,
+    "left_hs_source": "ASSUMED_half_stride_shift_not_measured",
+    "left_hs_phase_in_right_stride": 0.5000000000000004,
+    "observed_right_toe_off_s": [
+      5.873045877091795
+    ],
+    "observed_left_toe_off_s": [
+      5.361044404241469
+    ]
+  },
+  "contacts_by_plate": {
+    "1": {
+      "starts_loaded": true,
+      "ends_loaded": false,
+      "number_threshold_crossings": 1
+    },
+    "2": {
+      "starts_loaded": true,
+      "ends_loaded": false,
+      "number_threshold_crossings": 1
+    }
+  },
+  "events_warning": "20N crossing only if observable; force plate zero is not foot airborne; foot side from CoP relative to heel/toe markers",
+  "mapping": {
+    "pelvis": "OpenSim intrinsic ZXY; T transform to MuJoCo",
+    "sign_reversed": [
+      "knee_angle_r",
+      "knee_angle_l",
+      "hip_adduction_l",
+      "hip_rotation_l"
+    ],
+    "other_leg_signs": "unchanged",
+    "dependent_knee": "MuJoCo equality polynomials"
+  },
+  "s011_subtalar_flag": false,
+  "max_equality_residual": 0.0,
+  "independent_joint_limit_warnings": [],
+  "input_sha256": {
+    "joint_mot": "0da5b3e7ade1caccf756065395be6b776ff2c3552e40a403109aa37053111aac",
+    "grf_mot": "50b9b2a1fb76ca5b8f20799e782d97ca5e5469b74310ddcc9f5944b6766d9334",
+    "trc": "baa1fceaa44831043ef3282d2ec01cb50991c3066be3a43692f1d9290c6b9629"
+  },
+  "heading_alignment": {
+    "original_heading_deg_from_plus_x": 90.92535502002075,
+    "applied_world_z_yaw_deg": -0.9253550200207497,
+    "initial_root_xy_m_in_original_mujoco_frame": [
+      0.2012095,
+      0.58107952
+    ],
+    "horizontal_displacement_m": 1.2486342123272567,
+    "target_direction": "+y",
+    "operation": "Single rigid world-frame yaw per stride; root XY reset to (0,0)",
+    "joint_coordinates_changed": false,
+    "original_grf_and_marker_frame": "Original OpenSim laboratory coordinates (NOT rotated)",
+    "original_events_and_phases": "Unchanged",
+    "qvel": "Recomputed from aligned qpos using MuJoCo mj_differentiatePos",
+    "source_reference_sha256": "c9ed2c1e07c43f117844da39eb8c810a0beb0d60c03f54aeabf6245d388101f7",
+    "source_reference_path": "gait120_references_full\\S090\\Trial03\\step02.npz",
+    "note": "For comparisons with retained OpenSim-lab marker/GRF coordinates, apply the documented OpenSim-to-MuJoCo basis change and this yaw/origin transform."
+  }
+}

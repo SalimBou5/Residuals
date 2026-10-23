@@ -1,0 +1,3 @@
+time_s,time_since_start_s,plate_channel,threshold_N,transition,foot_side
+5.306647467399902,0.5366474673999022,ground_force2_vy,20.0,on,unassigned
+5.887732147846737,1.1177321478467377,ground_force1_vy,20.0,on,unassigned

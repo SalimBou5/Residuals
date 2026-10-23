@@ -1,0 +1,7 @@
+subject,trial,step,status,frames,duration_s,speed_est_m_s,left_hs_source,left_hs_phase,right_TO_observed_count,left_TO_observed_count,force_events_count,joint_warnings_count,flag_s011_subtalar,root_quaternion_frames_flipped,root_max_physical_step_deg
+S060,Trial01,step01,EXPORTED,93,0.9199999999999999,1.5119477761313174,observed_20N_crossing_cop_labeled,0.4952757286983093,0,0,2,0,0,23,0.9352603192402542
+S060,Trial01,step02,EXPORTED,92,0.9099999999999993,1.5206529892076148,ASSUMED_half_stride_shift_not_measured,0.4999999999999995,1,1,2,0,0,43,0.8459438424895508
+S060,Trial02,step01,EXPORTED,93,0.9199999999999999,1.4399243421662686,ASSUMED_half_stride_shift_not_measured,0.5,1,1,2,0,0,39,0.8689258416653262
+S060,Trial03,step01,EXPORTED,90,0.8899999999999997,1.5348268606897606,ASSUMED_half_stride_shift_not_measured,0.4999999999999995,1,1,2,0,0,34,0.7803961041591148
+S060,Trial04,step01,EXPORTED,92,0.9100000000000001,1.5453186385119375,ASSUMED_half_stride_shift_not_measured,0.5,1,1,3,0,0,50,0.7828132796421015
+S060,Trial05,step01,EXPORTED,86,0.8499999999999996,1.500212717289278,ASSUMED_half_stride_shift_not_measured,0.5,1,1,2,0,0,31,0.7085474141093262

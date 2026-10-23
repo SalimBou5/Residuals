@@ -1,0 +1,63 @@
+{
+  "status": "CANDIDATE_ONLY_NOT_DYNAMICS_VALIDATED",
+  "subject": "S020",
+  "trial": "Trial04",
+  "step": "step01",
+  "t0_s": 5.34,
+  "t1_s": 6.36,
+  "frames": 103,
+  "stride_duration_s": 1.0200000000000005,
+  "mean_speed_est_m_s": 1.250706539969812,
+  "speed_method": "magnitude horizontal OpenSim pelvis displacement / stride duration; not directly measured walking speed",
+  "timing": "original samples and durations preserved; phases added without temporal resampling",
+  "phase_boundary": "dataset right-HS-to-right-HS segmentation, see Boo et al 2025",
+  "events": {
+    "stride_start_right_hs_s": 5.34,
+    "stride_end_right_hs_s": 6.36,
+    "right_hs_boundary_sources": [
+      "dataset_segmentation_right_HS_inferred",
+      "dataset_segmentation_right_HS_inferred"
+    ],
+    "left_hs_time_s": 5.85,
+    "left_hs_source": "ASSUMED_half_stride_shift_not_measured",
+    "left_hs_phase_in_right_stride": 0.49999999999999956,
+    "observed_right_toe_off_s": [
+      5.962274736244956
+    ],
+    "observed_left_toe_off_s": [
+      5.445085934304433
+    ]
+  },
+  "contacts_by_plate": {
+    "1": {
+      "starts_loaded": true,
+      "ends_loaded": false,
+      "number_threshold_crossings": 1
+    },
+    "2": {
+      "starts_loaded": true,
+      "ends_loaded": false,
+      "number_threshold_crossings": 1
+    }
+  },
+  "events_warning": "20N crossing only if observable; force plate zero is not foot airborne; foot side from CoP relative to heel/toe markers",
+  "mapping": {
+    "pelvis": "OpenSim intrinsic ZXY; T transform to MuJoCo",
+    "sign_reversed": [
+      "knee_angle_r",
+      "knee_angle_l",
+      "hip_adduction_l",
+      "hip_rotation_l"
+    ],
+    "other_leg_signs": "unchanged",
+    "dependent_knee": "MuJoCo equality polynomials"
+  },
+  "s011_subtalar_flag": false,
+  "max_equality_residual": 0.0,
+  "independent_joint_limit_warnings": [],
+  "input_sha256": {
+    "joint_mot": "2208e010e49487b0ae10857058a6e75eade9e7d28a27759a58ca960f842ae860",
+    "grf_mot": "34dafba0879dcc69b93d205da97ff533b5bf1f8f0ffaab23ec7544c12c61530b",
+    "trc": "fa1909a47b59784a200c4da18707e6d9c8bef3efb45f4c55549c7501dc422d1e"
+  }
+}

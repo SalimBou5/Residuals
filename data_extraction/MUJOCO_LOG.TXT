@@ -1,0 +1,6 @@
+Thu Oct  8 11:59:06 2026
+WARNING: mju_openResource: unknown file 'path/to/myolegs.xml'
+
+Wed Oct 14 11:52:25 2026
+WARNING: mju_openResource: unknown file '$C:\Users\BoussofaraS\OneDrive - University of Twente\Documents\myosuite\myosuite\simhive\myo_sim\leg\myolegs.xml'
+

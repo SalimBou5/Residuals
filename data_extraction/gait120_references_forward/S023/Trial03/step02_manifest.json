@@ -1,0 +1,117 @@
+{
+  "status": "CANDIDATE_ONLY_NOT_DYNAMICS_VALIDATED",
+  "subject": "S023",
+  "trial": "Trial03",
+  "step": "step02",
+  "t0_s": 5.73,
+  "t1_s": 6.76,
+  "frames": 104,
+  "stride_duration_s": 1.0299999999999994,
+  "mean_speed_est_m_s": 1.198012740108634,
+  "speed_method": "magnitude horizontal OpenSim pelvis displacement / stride duration; not directly measured walking speed",
+  "timing": "original samples and durations preserved; phases added without temporal resampling",
+  "phase_boundary": "dataset right-HS-to-right-HS segmentation, see Boo et al 2025",
+  "events": {
+    "stride_start_right_hs_s": 5.73,
+    "stride_end_right_hs_s": 6.76,
+    "right_hs_boundary_sources": [
+      "dataset_segmentation_right_HS_inferred",
+      "dataset_segmentation_right_HS_inferred"
+    ],
+    "left_hs_time_s": 6.245,
+    "left_hs_source": "ASSUMED_half_stride_shift_not_measured",
+    "left_hs_phase_in_right_stride": 0.5,
+    "observed_right_toe_off_s": [
+      6.366115795465148
+    ],
+    "observed_left_toe_off_s": [
+      5.843133682183482
+    ]
+  },
+  "contacts_by_plate": {
+    "1": {
+      "starts_loaded": true,
+      "ends_loaded": false,
+      "number_threshold_crossings": 1
+    },
+    "2": {
+      "starts_loaded": true,
+      "ends_loaded": false,
+      "number_threshold_crossings": 1
+    }
+  },
+  "events_warning": "20N crossing only if observable; force plate zero is not foot airborne; foot side from CoP relative to heel/toe markers",
+  "mapping": {
+    "pelvis": "OpenSim intrinsic ZXY; T transform to MuJoCo",
+    "sign_reversed": [
+      "knee_angle_r",
+      "knee_angle_l",
+      "hip_adduction_l",
+      "hip_rotation_l"
+    ],
+    "other_leg_signs": "unchanged",
+    "dependent_knee": "MuJoCo equality polynomials"
+  },
+  "s011_subtalar_flag": false,
+  "max_equality_residual": 0.0,
+  "independent_joint_limit_warnings": [],
+  "input_sha256": {
+    "joint_mot": "0ef631ceaa84a8c150caca7eba4d2ccc02513b3029e1f785fc9ed22e5dfd56f9",
+    "grf_mot": "38bade9cb9a8f101d8da84d0fa661ee1b3bc231202e12d78178fd0cc20008f5d",
+    "trc": "43804a66f1f1d7552f9c40b16e33d04070b8e96d9c397daf77de7469b45f7927"
+  },
+  "heading_alignment": {
+    "original_heading_deg_from_plus_x": 89.24382982950151,
+    "applied_world_z_yaw_deg": 0.7561701704984928,
+    "initial_root_xy_m_in_original_mujoco_frame": [
+      -0.1426205,
+      0.70953138
+    ],
+    "horizontal_displacement_m": 1.2339531223118922,
+    "target_direction": "+y",
+    "operation": "Single rigid world-frame yaw per stride; root XY reset to (0,0)",
+    "joint_coordinates_changed": false,
+    "original_grf_and_marker_frame": "Original OpenSim laboratory coordinates (NOT rotated)",
+    "original_events_and_phases": "Unchanged",
+    "qvel": "Recomputed from aligned qpos using MuJoCo mj_differentiatePos",
+    "source_reference_sha256": "b8f665b7db60c39d7d2b5326e81c7561b680c3244b2b725305e3250c8a82daa0",
+    "source_reference_path": "gait120_references_full\\S023\\Trial03\\step02.npz",
+    "note": "For comparisons with retained OpenSim-lab marker/GRF coordinates, apply the documented OpenSim-to-MuJoCo basis change and this yaw/origin transform."
+  },
+  "event_refractory": {
+    "duration_s": 0.02,
+    "scope": "per_force_plate",
+    "method": "Ignore HS and TO crossings within duration_s after any accepted crossing",
+    "suppressed_events": [
+      {
+        "time_s": "6.3687723218472625",
+        "time_since_start_s": "0.6387723218472621",
+        "normalized_phase": "0.6201673027643325",
+        "plate": "2",
+        "force_channel": "ground_force2_vy",
+        "threshold_N": "20.0",
+        "event": "HS_candidate",
+        "foot_side": "right",
+        "side_method": "cop_marker_geometry",
+        "nearest_distance_m": "0.12855040735473422",
+        "side_margin_m": "0.254967634166637",
+        "event_source": "observed_20N_crossing"
+      },
+      {
+        "time_s": "6.369066830548345",
+        "time_since_start_s": "0.6390668305483445",
+        "normalized_phase": "0.6204532335420824",
+        "plate": "2",
+        "force_channel": "ground_force2_vy",
+        "threshold_N": "20.0",
+        "event": "TO_candidate",
+        "foot_side": "right",
+        "side_method": "same_plate_contact_bout",
+        "nearest_distance_m": "nan",
+        "side_margin_m": "nan",
+        "event_source": "observed_20N_crossing"
+      }
+    ],
+    "raw_grf_preserved_in_npz": true
+  }
+}

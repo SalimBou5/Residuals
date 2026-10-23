@@ -1,0 +1,68 @@
+{
+  "status": "CANDIDATE_ONLY_NOT_DYNAMICS_VALIDATED",
+  "subject": "S060",
+  "trial": "Trial01",
+  "step": "step02",
+  "t0_s": 5.11,
+  "t1_s": 6.02,
+  "frames": 92,
+  "stride_duration_s": 0.9099999999999993,
+  "mean_speed_est_m_s": 1.5206529892076148,
+  "speed_method": "magnitude horizontal OpenSim pelvis displacement / stride duration; not directly measured walking speed",
+  "timing": "original samples and durations preserved; phases added without temporal resampling",
+  "phase_boundary": "dataset right-HS-to-right-HS segmentation, see Boo et al 2025",
+  "events": {
+    "stride_start_right_hs_s": 5.11,
+    "stride_end_right_hs_s": 6.02,
+    "right_hs_boundary_sources": [
+      "dataset_segmentation_right_HS_inferred",
+      "dataset_segmentation_right_HS_inferred"
+    ],
+    "left_hs_time_s": 5.5649999999999995,
+    "left_hs_source": "ASSUMED_half_stride_shift_not_measured",
+    "left_hs_phase_in_right_stride": 0.4999999999999995,
+    "observed_right_toe_off_s": [
+      5.644782189438809
+    ],
+    "observed_left_toe_off_s": [
+      5.172436856317332
+    ]
+  },
+  "contacts_by_plate": {
+    "1": {
+      "starts_loaded": true,
+      "ends_loaded": false,
+      "number_threshold_crossings": 1
+    },
+    "2": {
+      "starts_loaded": true,
+      "ends_loaded": false,
+      "number_threshold_crossings": 1
+    }
+  },
+  "events_warning": "20N crossing only if observable; force plate zero is not foot airborne; foot side from CoP relative to heel/toe markers",
+  "mapping": {
+    "pelvis": "OpenSim intrinsic ZXY; T transform to MuJoCo",
+    "sign_reversed": [
+      "knee_angle_r",
+      "knee_angle_l",
+      "hip_adduction_l",
+      "hip_rotation_l"
+    ],
+    "other_leg_signs": "unchanged",
+    "dependent_knee": "MuJoCo equality polynomials"
+  },
+  "s011_subtalar_flag": false,
+  "max_equality_residual": 0.0,
+  "root_quaternion_sign_unwrap": {
+    "frames_flipped": 43,
+    "max_physical_step_deg": 0.8459438424895508,
+    "method": "flip q[i] to maximize dot with q[i-1] before differentiation"
+  },
+  "independent_joint_limit_warnings": [],
+  "input_sha256": {
+    "joint_mot": "5db0ed4b7671fe3009b7697175063f8586bc7e227f024eef28182b16de16ac23",
+    "grf_mot": "a22dc65e1ec76388e2ac21cf76772d229fe64e0ebcb2b07f149a9c3bfdebab9f",
+    "trc": "3f33055b755b8ed55db2bfaa0738c965de63bc41896c19261aa360882524784b"
+  }
+}

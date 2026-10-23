@@ -1,0 +1,63 @@
+{
+  "status": "CANDIDATE_ONLY_NOT_DYNAMICS_VALIDATED",
+  "subject": "S025",
+  "trial": "Trial04",
+  "step": "step02",
+  "t0_s": 6.26,
+  "t1_s": 7.4,
+  "frames": 115,
+  "stride_duration_s": 1.1400000000000006,
+  "mean_speed_est_m_s": 1.1689119607581915,
+  "speed_method": "magnitude horizontal OpenSim pelvis displacement / stride duration; not directly measured walking speed",
+  "timing": "original samples and durations preserved; phases added without temporal resampling",
+  "phase_boundary": "dataset right-HS-to-right-HS segmentation, see Boo et al 2025",
+  "events": {
+    "stride_start_right_hs_s": 6.26,
+    "stride_end_right_hs_s": 7.4,
+    "right_hs_boundary_sources": [
+      "dataset_segmentation_right_HS_inferred",
+      "dataset_segmentation_right_HS_inferred"
+    ],
+    "left_hs_time_s": 6.83,
+    "left_hs_source": "ASSUMED_half_stride_shift_not_measured",
+    "left_hs_phase_in_right_stride": 0.5,
+    "observed_right_toe_off_s": [
+      6.935030180537702
+    ],
+    "observed_left_toe_off_s": [
+      6.376776634699299
+    ]
+  },
+  "contacts_by_plate": {
+    "1": {
+      "starts_loaded": true,
+      "ends_loaded": false,
+      "number_threshold_crossings": 1
+    },
+    "2": {
+      "starts_loaded": true,
+      "ends_loaded": false,
+      "number_threshold_crossings": 1
+    }
+  },
+  "events_warning": "20N crossing only if observable; force plate zero is not foot airborne; foot side from CoP relative to heel/toe markers",
+  "mapping": {
+    "pelvis": "OpenSim intrinsic ZXY; T transform to MuJoCo",
+    "sign_reversed": [
+      "knee_angle_r",
+      "knee_angle_l",
+      "hip_adduction_l",
+      "hip_rotation_l"
+    ],
+    "other_leg_signs": "unchanged",
+    "dependent_knee": "MuJoCo equality polynomials"
+  },
+  "s011_subtalar_flag": false,
+  "max_equality_residual": 0.0,
+  "independent_joint_limit_warnings": [],
+  "input_sha256": {
+    "joint_mot": "bfd970810d1d6b27e81acaa0cbe5bd1034acdefeea2cb79e660c78560fd1fa0a",
+    "grf_mot": "8eb6954cf20fcbdf7c35dc7d7f4b7e485bbdce17a770638c7e35c8607ce9de73",
+    "trc": "314fcb61e3dbb1af8ece34c068069ee25479d484a1d83c0470e7b191d0b1ffdf"
+  }
+}

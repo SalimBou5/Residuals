@@ -1,0 +1,77 @@
+{
+  "status": "CANDIDATE_ONLY_NOT_DYNAMICS_VALIDATED",
+  "subject": "S029",
+  "trial": "Trial05",
+  "step": "step01",
+  "t0_s": 5.4,
+  "t1_s": 6.49,
+  "frames": 110,
+  "stride_duration_s": 1.0899999999999999,
+  "mean_speed_est_m_s": 1.1440378766662442,
+  "speed_method": "magnitude horizontal OpenSim pelvis displacement / stride duration; not directly measured walking speed",
+  "timing": "original samples and durations preserved; phases added without temporal resampling",
+  "phase_boundary": "dataset right-HS-to-right-HS segmentation, see Boo et al 2025",
+  "events": {
+    "stride_start_right_hs_s": 5.4,
+    "stride_end_right_hs_s": 6.49,
+    "right_hs_boundary_sources": [
+      "dataset_segmentation_right_HS_inferred",
+      "dataset_segmentation_right_HS_inferred"
+    ],
+    "left_hs_time_s": 5.945,
+    "left_hs_source": "ASSUMED_half_stride_shift_QC_outlier_not_measured",
+    "left_hs_phase_in_right_stride": 0.5,
+    "observed_right_toe_off_s": [
+      6.0691800014049875
+    ],
+    "observed_left_toe_off_s": [
+      5.509081515530572,
+      5.5110162335770525
+    ]
+  },
+  "contacts_by_plate": {
+    "1": {
+      "starts_loaded": true,
+      "ends_loaded": false,
+      "number_threshold_crossings": 3
+    },
+    "2": {
+      "starts_loaded": true,
+      "ends_loaded": false,
+      "number_threshold_crossings": 1
+    }
+  },
+  "events_warning": "20N crossing only if observable; force plate zero is not foot airborne; foot side from CoP relative to heel/toe markers",
+  "mapping": {
+    "pelvis": "OpenSim intrinsic ZXY; T transform to MuJoCo",
+    "sign_reversed": [
+      "knee_angle_r",
+      "knee_angle_l",
+      "hip_adduction_l",
+      "hip_rotation_l"
+    ],
+    "other_leg_signs": "unchanged",
+    "dependent_knee": "MuJoCo equality polynomials"
+  },
+  "s011_subtalar_flag": false,
+  "max_equality_residual": 0.0,
+  "independent_joint_limit_warnings": [],
+  "input_sha256": {
+    "joint_mot": "8ba88466c00ca164e6eddf12ba686069d6718ef80f89eafef98a34e2f7585e25",
+    "grf_mot": "c14e704cc9a71e1664b1381f30182efedc7a243acf24e7ac3e9024b751098b10",
+    "trc": "c74a1356a5d0eb4226749c0db41afc64a7b0c426de9a0a95fb437a82e3f25e28"
+  },
+  "left_hs_qc": {
+    "reason": "Selected observed left HS outside plausible phase window; retained raw force crossing",
+    "window": [
+      0.3,
+      0.7
+    ],
+    "rejected_selection": {
+      "left_hs_time_s": 5.510983754053382,
+      "left_hs_source": "observed_20N_crossing_cop_labeled",
+      "left_hs_phase_in_right_stride": 0.10181995784713907
+    },
+    "original_event_csv_unchanged": true
+  }
+}

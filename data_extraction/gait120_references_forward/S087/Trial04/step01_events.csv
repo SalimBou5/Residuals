@@ -1,0 +1,3 @@
+time_s,time_since_start_s,normalized_phase,plate,force_channel,threshold_N,event,foot_side,side_method,nearest_distance_m,side_margin_m,event_source
+5.117858780591742,0.4778587805917427,0.49263791813581687,1,ground_force1_vy,20.0,HS_candidate,left,cop_marker_geometry,0.024133346508451694,0.631559583698833,observed_20N_crossing
+5.608701623904474,0.9687016239044741,0.9986614679427561,2,ground_force2_vy,20.0,HS_candidate,right,cop_marker_geometry,0.03898727895863591,0.5884006063753113,observed_20N_crossing

@@ -1,0 +1,34 @@
+{
+  "status": "CANDIDATE - NOT VALIDATED FOR TRAINING",
+  "filtering": "none",
+  "qpos_units": "MuJoCo free root xyz in meters, quaternion wxyz, hinge radians, slides meters",
+  "qvel_units": "MuJoCo velocity order; linear m/s, angular rad/s",
+  "qvel_method": "mj_differentiatePos: centered differences inside; one-sided at boundaries",
+  "reference_phase": "NOT EXTRACTED: insufficient labeled bilateral HS/TO",
+  "force_events": "20 N threshold crossings of plate channels; foot side not inferred",
+  "force_zero_warning": "A zero reading on one plate does not demonstrate that a foot is airborne",
+  "mapping": {
+    "pelvis": "intrinsic OpenSim ZXY; T basis change; MyoLeg root R=T@R_os@T.T",
+    "sign_reversed": [
+      "knee_angle_r",
+      "knee_angle_l",
+      "hip_adduction_l",
+      "hip_rotation_l"
+    ],
+    "other_leg_joint_signs": "unchanged",
+    "dependent_knee": "MuJoCo joint equality polynomials including patella"
+  },
+  "nframes": 109,
+  "start_time_s": 5.12,
+  "end_time_s": 6.2,
+  "model_nq": 35,
+  "model_nv": 34,
+  "joint_range_warnings": [],
+  "max_equality_residual": 0.0,
+  "input_sha256": {
+    "joint_mot": "c2e3df0512c56a4d31510056911758bba12dcaebdba3a40de09ab98a01bdb0ed",
+    "grf_mot": "19d70df565c67e93fd69efaa395f59ed6bd35d26918b193204887ff4e17910d7",
+    "trc": "58d2cd4fa85b5882b4fb91c29689f61da3e564dd6ce67f5014c4a2060f006c28",
+    "model_main_xml": "cbaf0baf173e81601c0244e8e7c706384a1d1c958d79cddb7c8861604317c99a"
+  }
+}

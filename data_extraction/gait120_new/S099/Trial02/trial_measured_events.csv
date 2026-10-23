@@ -1,0 +1,5 @@
+time_s,time_since_start_s,normalized_phase,plate,force_channel,threshold_N,event,foot_side,side_method,nearest_distance_m,side_margin_m,event_source,event_status,rejected_reason,bout_peak_N
+3.96691853415367,,,1,ground_force1_vy,20.0,HS_candidate,left,loaded_bout_CoP_to_foot_markers,0.005491133673715425,0.48862678346294475,observed_20N_crossing,MEASURED_CANDIDATE,,1025.625
+4.469981947724832,,,2,ground_force2_vy,20.0,HS_candidate,right,loaded_bout_CoP_to_foot_markers,0.014624432526032976,0.4528900362740089,observed_20N_crossing,MEASURED_CANDIDATE,,954.466187
+4.579026385602626,,,1,ground_force1_vy,20.0,TO_candidate,left,loaded_bout_CoP_to_foot_markers,0.005491133673715425,0.48862678346294475,observed_20N_crossing,MEASURED_CANDIDATE,,1025.625
+5.079232813656833,,,2,ground_force2_vy,20.0,TO_candidate,right,loaded_bout_CoP_to_foot_markers,0.014624432526032976,0.4528900362740089,observed_20N_crossing,MEASURED_CANDIDATE,,954.466187

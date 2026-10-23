@@ -1,0 +1,6 @@
+time_s,time_since_start_s,normalized_phase,foot_side,event,event_source,plate,force_channel,selection_note
+5.730000000000,0.000000000000,0.000000000000,right,HS,dataset_right_HS_boundary_inferred,,,start of right-HS-to-right-HS segmented stride
+5.825277389142,0.095277389142,0.099247280356,left,TO,estimated_cohort_median,,,no credible measured crossing; median of measured strides
+6.210000000000,0.480000000000,0.500000000000,left,HS,estimated_half_stride,,,not observed; exactly half the right stride
+6.310725453595,0.580725453595,0.604922347495,right,TO,estimated_cohort_median,,,no credible measured crossing; median of measured strides
+6.690000000000,0.960000000000,1.000000000000,right,HS,dataset_right_HS_boundary_inferred,,,end of right-HS-to-right-HS segmented stride

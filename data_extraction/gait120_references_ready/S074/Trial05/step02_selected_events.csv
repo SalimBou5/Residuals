@@ -1,0 +1,6 @@
+time_s,time_since_start_s,normalized_phase,foot_side,event,event_source,plate,force_channel,selection_note
+3.700000000000,0.000000000000,0.000000000000,right,HS,dataset_right_HS_boundary_inferred,,,start of right-HS-to-right-HS segmented stride
+3.782097644709,0.082097644709,0.086418573378,left,TO,observed_20N_crossing,1,ground_force1_vy,threshold crossing candidate
+4.175000000000,0.475000000000,0.500000000000,left,HS,estimated_half_stride,,,not observed; exactly half the right stride
+4.259520384453,0.559520384453,0.588968825740,right,TO,observed_20N_crossing,2,ground_force2_vy,threshold crossing candidate
+4.650000000000,0.950000000000,1.000000000000,right,HS,dataset_right_HS_boundary_inferred,,,end of right-HS-to-right-HS segmented stride
