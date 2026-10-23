@@ -1,0 +1,115 @@
+{
+  "source": "S115/Trial04/step01",
+  "status": "KINEMATIC_REFERENCE_NOT_DYNAMICS_VALIDATED",
+  "t0_s": 3.35,
+  "t1_s": 4.35,
+  "stride_duration_s": 0.9999999999999996,
+  "frames": 101,
+  "speed_est_m_s": 1.3777487732173606,
+  "mapping": {
+    "open_sim_to_mujoco_world_matrix_T": [
+      [
+        1.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      [
+        0.0,
+        1.0,
+        0.0
+      ]
+    ],
+    "pelvis_euler_order": "intrinsic ZXY (tilt,list,rotation)",
+    "joint_sign_reversals": [
+      "hip_adduction_l",
+      "hip_rotation_l",
+      "knee_angle_l",
+      "knee_angle_r"
+    ],
+    "dependent_knee_coordinates": "MuJoCo compiled equality polynomials",
+    "subject_specific_rescaling": false
+  },
+  "quaternion_fix": {
+    "flipped_quaternions": 0,
+    "max_physical_rotation_deg_per_frame": 1.126096413119946
+  },
+  "kinematic_qc": {
+    "max_equality_residual": 0.0,
+    "independent_joint_warnings": []
+  },
+  "heading_alignment": {
+    "applied_world_z_yaw_deg": 1.0167198904484733,
+    "root_initial_original_xy_m": [
+      -0.2221026,
+      -1.27476348
+    ],
+    "target_progression": "+Y",
+    "horizontal_displacement_m": 1.37774877321736,
+    "quaternion_continuity_after_rotation": {
+      "flipped_quaternions": 0,
+      "max_physical_rotation_deg_per_frame": 1.126096413119946
+    },
+    "raw_marker_and_grf_frame": "original_OpenSim_lab_unrotated"
+  },
+  "s011_subtalar_flag": false,
+  "known_two_step_false_HS_case": false,
+  "paper_method": "For level walking, paper uses 20N right HS upward and right TO downward crossings.",
+  "bilateral_extension": "The same force criterion was applied to both plates, with foot assignment using loaded-bout CoP and markers.",
+  "event_filter": "20 ms (configurable) interior threshold-chatter removal; project adjustment not stated in paper",
+  "events": {
+    "observed_by_foot": {
+      "left": {
+        "HS": [
+          3.851272375559383
+        ],
+        "TO": []
+      },
+      "right": {
+        "HS": [
+          4.342277397680352
+        ],
+        "TO": []
+      }
+    },
+    "left_hs_time_s": 3.851272375559383,
+    "left_hs_source": "GRF_20N",
+    "right_hs_boundaries_s": [
+      3.35,
+      4.35
+    ],
+    "right_hs_boundary_source": "Gait120_authors_stride_segmentation",
+    "missing_event_policy": "Never replace unavailable force crossings with typical phase estimates",
+    "unassigned_observed_count": 0,
+    "rejected_short_crossings_count": 0,
+    "manually_rejected_known_false_left_HS": 0,
+    "left_hs_method_note": "Measured GRF onset",
+    "left_hs_phase_in_right_stride": 0.5012723755593831
+  },
+  "raw_markers_and_grf_still_in_OpenSim_lab_frame": true,
+  "provenance_sha256": {
+    "joint_mot": "c2b28b5b6241605f07f2b19c9b3847719a536d2f60a56b1bdb32c2c58dfb501d",
+    "force_mot": "0c7857239feee9412e142138290e4f8e394d21521b464909e28865a1ca93e7d1",
+    "marker_trc": "6ab82e63c4dc0a101bd87ac426bdc77ccce9f62095175676597a59344da94d8f"
+  },
+  "bilateral_HS_extraction": {
+    "subject": "S115",
+    "trial": "Trial04",
+    "step": "step01",
+    "right_hs_start_s": 3.35,
+    "right_hs_end_s": 4.35,
+    "right_hs_source": "AUTHORS_SEGMENTATION",
+    "stride_duration_s": 0.9999999999999996,
+    "left_hs_s": 3.851272375559383,
+    "left_hs_phase": 0.5012723755593831,
+    "left_hs_source": "GRF_20N",
+    "force_plate": "1",
+    "marker_heel_min_s": 3.83,
+    "n_valid_left_grf_candidates": 1,
+    "evidence_note": "Measured GRF onset"
+  }
+}
