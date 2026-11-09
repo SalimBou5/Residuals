@@ -1,0 +1,33 @@
+term,perturbation,units,score,weighted_contribution,interpretation
+joint_position,0.0,rad,1.0,0.2,joint RMS
+joint_position,0.075,rad,0.8408964152537145,0.16817928305074292,joint RMS
+joint_position,0.15,rad,0.5,0.1,joint RMS
+joint_position,0.3,rad,0.0625,0.0125,joint RMS
+joint_velocity,0.0,rad/s,1.0,0.1,joint RMS
+joint_velocity,1.0,rad/s,0.8408964152537145,0.08408964152537146,joint RMS
+joint_velocity,2.0,rad/s,0.5,0.05,joint RMS
+joint_velocity,4.0,rad/s,0.0625,0.00625,joint RMS
+site_position,0.0,m,1.0,0.28,site Euclidean RMS
+site_position,0.03,m,0.8408964152537145,0.23545099627104008,site Euclidean RMS
+site_position,0.06,m,0.5,0.14,site Euclidean RMS
+site_position,0.12,m,0.0625,0.0175,site Euclidean RMS
+site_orientation,0.0,rad,1.0,0.14,site RMS
+site_orientation,0.1,rad,0.8408964152537145,0.11772549813552004,site RMS
+site_orientation,0.2,rad,0.5,0.07,site RMS
+site_orientation,0.4,rad,0.0625,0.00875,site RMS
+site_linear_velocity,0.0,m/s,1.0,0.18,site Euclidean RMS
+site_linear_velocity,0.25,m/s,0.8408964152537145,0.1513613547456686,site Euclidean RMS
+site_linear_velocity,0.5,m/s,0.5,0.09,site Euclidean RMS
+site_linear_velocity,1.0,m/s,0.0625,0.01125,site Euclidean RMS
+site_angular_velocity,0.0,rad/s,1.0,0.1,site Euclidean RMS
+site_angular_velocity,1.0,rad/s,0.8408964152537145,0.08408964152537146,site Euclidean RMS
+site_angular_velocity,2.0,rad/s,0.5,0.05,site Euclidean RMS
+site_angular_velocity,4.0,rad/s,0.0625,0.00625,site Euclidean RMS
+speed,0.0,m/s,1.0,0.2,signed speed difference
+speed,0.175,m/s,0.8408964152537145,0.16817928305074292,signed speed difference
+speed,0.35,m/s,0.5,0.1,signed speed difference
+speed,0.7,m/s,0.0625,0.0125,signed speed difference
+upright,0.0,degrees,1.0,0.2,tilt angle
+upright,15.0,degrees,0.8383745949131712,0.16767491898263426,tilt angle
+upright,30.0,degrees,0.5,0.1,tilt angle
+upright,60.0,degrees,0.07525593598273207,0.015051187196546415,tilt angle

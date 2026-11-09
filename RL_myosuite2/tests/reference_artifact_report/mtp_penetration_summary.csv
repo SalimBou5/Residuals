@@ -1,0 +1,3 @@
+side,spike_frames,spike_frames_with_penetration,spike_penetration_fraction,total_frames,all_frames_with_penetration,overall_penetration_fraction,spearman_abs_mtp_velocity_vs_penetration
+right,115,15,0.13043478260869565,202576,11559,0.05706006634547034,0.07676062218524175
+left,55,21,0.38181818181818183,202576,15282,0.0754383540004739,0.0741620916737169
