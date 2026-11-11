@@ -24,6 +24,9 @@ import numpy as np
 from ppo_companion  import EnvironmentSettings, TrainingDiagnostics, create_environment
 from smoke_test_mep import run_dynamic_episodes
 
+import argparse
+import os
+os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.ArgumentDefaultsHelpFormatter)

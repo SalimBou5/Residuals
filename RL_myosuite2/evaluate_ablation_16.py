@@ -7,9 +7,7 @@ Produces CSVs for both individual episodes and aggregate performance.
 
 Example (PowerShell, from the RL_myosuite2 project root):
 
-python evaluate_ablation_16.py `
-  --summary evaluation_resets_10m.json `
-  --checkpoint "runs\ppo_myoleg\ppo_20261108_160227_seed42\final_model.zip"
+python evaluate_ablation_16.py --summary evaluation_resets_10m.json --checkpoint "runs\ppo_myoleg\corrected_run\final_model.zip"
 """
 from __future__ import annotations
 
@@ -24,7 +22,9 @@ import numpy as np
 from ppo_companion import create_environment, EnvironmentSettings, neutral_mep_action, validate_dynamic_step
 
 MODES = ('mep', 'phase-only', 'muscle-only', 'full')
-
+import argparse
+import os
+os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 
 def parser():
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.ArgumentDefaultsHelpFormatter)

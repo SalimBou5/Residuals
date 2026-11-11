@@ -14,6 +14,8 @@ New: optional live/offline diagnostic plots for
 - muscle excitations: applied total control vs MEP baseline
 - kinematics: actual nonroot joint positions vs reference joint positions
 - phase: phase, theta, drift and phase-rate history
+
+python view_ppo_myoleg.py --summary "evaluation_resets_10m.json"  --checkpoint "runs\\ppo_myoleg\\ppo_20261108_160227_seed42\\final_model.zip" --episode 7 --speed 0.5 --stay-open --plot-mode save --muscles-per-panel 3
 """
 from __future__ import annotations
 
@@ -23,11 +25,14 @@ import csv
 import json
 from pathlib import Path
 import time
+import itertools
+import os
+
+os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 
 import numpy as np
 
 from ppo_companion import EnvironmentSettings, create_environment, neutral_mep_action, validate_dynamic_step
-
 
 PATH_ARGS = ('model', 'references', 'mep', 'lookup', 'normalization', 'reward_config')
 
@@ -70,6 +75,7 @@ def make_parser() -> argparse.ArgumentParser:
                    help='Limit number of joints plotted per side (0 = plot all side joints)')
     p.add_argument('--muscles-per-panel', type=int, default=3,
                    help='Maximum number of muscles on one saved subplot, split within anatomical groups')
+    p.add_argument('--loop', action='store_true', help='Loop episodes infinitely until the viewer is closed')
     return p
 
 
@@ -202,11 +208,6 @@ def _strip_side_suffix(name: str) -> str:
 
 
 def _muscle_group_name(raw_name: str) -> str:
-    """Anatomical plotting families; multi-joint muscles appear only once.
-
-    The family labels are for plot organization, not claims of unique function.
-    Unknown names are retained in 'Other muscles'.
-    """
     name = _strip_side_suffix(raw_name).lower().replace('-', '').replace('_', '')
     if name.startswith(('glmax', 'glutmax')):
         return 'Gluteus maximus'
@@ -237,7 +238,6 @@ def _muscle_group_name(raw_name: str) -> str:
 
 def _group_indices_by_name(names: list[str], idxs: list[int],
                            max_per_panel: int = 3) -> list[tuple[str, list[int]]]:
-    """Preserve all muscles, split long families into panels of <= max_per_panel."""
     if max_per_panel < 1:
         raise ValueError('--muscles-per-panel must be at least 1')
     order = [
@@ -318,10 +318,27 @@ class EpisodePlotter:
         self.plot_save = plot_mode in ('save', 'both')
         self.plot_update_every = max(1, int(plot_update_every))
         self.mode = mode
+        
+        self.t_offset = 0.0
+        self.last_t = 0.0
+
         self._mpl = None
-        self._fig_exc = self._axs_exc = None
-        self._fig_kin = self._axs_kin = None
+        
+        # Individual figures for live plot mode, splitting muscles into 2 figures per side
+        self._fig_exc_r1 = self._axs_exc_r1 = None
+        self._fig_exc_r2 = self._axs_exc_r2 = None
+        self._fig_exc_l1 = self._axs_exc_l1 = None
+        self._fig_exc_l2 = self._axs_exc_l2 = None
+        
+        self._fig_kin_r = self._axs_kin_r = None
+        self._fig_kin_l = self._axs_kin_l = None
         self._fig_phase = self._axs_phase = None
+
+        self.rm_g1 = []
+        self.rm_g2 = []
+        self.lm_g1 = []
+        self.lm_g2 = []
+
         self.times = []
         self.phase = []
         self.theta = []
@@ -333,6 +350,7 @@ class EpisodePlotter:
         self.joint_reference = []
         self.actuator_names = actuator_names(env, mj)
         self.joint_names, self.joint_qpos_ids = nonroot_joint_metadata(env, mj)
+        
         self.right_muscles = _maybe_limit(_slice_side(self.actuator_names, 'r'), max_muscles_per_side)
         self.left_muscles = _maybe_limit(_slice_side(self.actuator_names, 'l'), max_muscles_per_side)
         self.right_muscle_groups = _group_indices_by_name(self.actuator_names, self.right_muscles, muscles_per_panel)
@@ -343,61 +361,109 @@ class EpisodePlotter:
         self.left_joint_groups = _group_joints(self.joint_names, self.left_joints)
         self._init_live()
 
+    def mark_episode_end(self):
+        self.t_offset += self.last_t
+        self.last_t = 0.0
+
     def _init_live(self):
         if not self.plot_live:
             return
         import matplotlib.pyplot as plt
         self._mpl = plt
         plt.ion()
-        self._fig_exc, self._axs_exc = plt.subplots(2, 1, figsize=(14, 9), sharex=True)
-        self._fig_kin, self._axs_kin = plt.subplots(2, 1, figsize=(14, 9), sharex=True)
+        
+        # Right Muscles Split
+        n_rm = len(self.right_muscle_groups)
+        if n_rm > 0:
+            mid_rm = (n_rm + 1) // 2 if n_rm > 1 else 1
+            self.rm_g1 = self.right_muscle_groups[:mid_rm]
+            self.rm_g2 = self.right_muscle_groups[mid_rm:]
+            
+            if self.rm_g1:
+                n1 = len(self.rm_g1)
+                self._fig_exc_r1, self._axs_exc_r1 = plt.subplots(n1, 1, figsize=(15, max(3.2 * n1, 5.0)), sharex=True)
+                if n1 == 1: self._axs_exc_r1 = [self._axs_exc_r1]
+                title1 = 'Right Muscle Excitations' if not self.rm_g2 else 'Right Muscle Excitations (1/2)'
+                self._fig_exc_r1.suptitle(f'{title1} ({self.mode})', y=0.99)
+                self._fig_exc_r1.canvas.manager.set_window_title('Right Exc 1')
+
+            if self.rm_g2:
+                n2 = len(self.rm_g2)
+                self._fig_exc_r2, self._axs_exc_r2 = plt.subplots(n2, 1, figsize=(15, max(3.2 * n2, 5.0)), sharex=True)
+                if n2 == 1: self._axs_exc_r2 = [self._axs_exc_r2]
+                self._fig_exc_r2.suptitle(f'Right Muscle Excitations (2/2) ({self.mode})', y=0.99)
+                self._fig_exc_r2.canvas.manager.set_window_title('Right Exc 2')
+
+        # Left Muscles Split
+        n_lm = len(self.left_muscle_groups)
+        if n_lm > 0:
+            mid_lm = (n_lm + 1) // 2 if n_lm > 1 else 1
+            self.lm_g1 = self.left_muscle_groups[:mid_lm]
+            self.lm_g2 = self.left_muscle_groups[mid_lm:]
+            
+            if self.lm_g1:
+                n1 = len(self.lm_g1)
+                self._fig_exc_l1, self._axs_exc_l1 = plt.subplots(n1, 1, figsize=(15, max(3.2 * n1, 5.0)), sharex=True)
+                if n1 == 1: self._axs_exc_l1 = [self._axs_exc_l1]
+                title1 = 'Left Muscle Excitations' if not self.lm_g2 else 'Left Muscle Excitations (1/2)'
+                self._fig_exc_l1.suptitle(f'{title1} ({self.mode})', y=0.99)
+                self._fig_exc_l1.canvas.manager.set_window_title('Left Exc 1')
+
+            if self.lm_g2:
+                n2 = len(self.lm_g2)
+                self._fig_exc_l2, self._axs_exc_l2 = plt.subplots(n2, 1, figsize=(15, max(3.2 * n2, 5.0)), sharex=True)
+                if n2 == 1: self._axs_exc_l2 = [self._axs_exc_l2]
+                self._fig_exc_l2.suptitle(f'Left Muscle Excitations (2/2) ({self.mode})', y=0.99)
+                self._fig_exc_l2.canvas.manager.set_window_title('Left Exc 2')
+
+        # Joint Kinematics
+        n_rj = len(self.right_joint_groups)
+        if n_rj > 0:
+            self._fig_kin_r, self._axs_kin_r = plt.subplots(n_rj, 1, figsize=(15, max(3.0 * n_rj, 5.0)), sharex=True)
+            if n_rj == 1: self._axs_kin_r = [self._axs_kin_r]
+            self._fig_kin_r.suptitle(f'Right Joint Kinematics ({self.mode})', y=0.99)
+            self._fig_kin_r.canvas.manager.set_window_title('Right Kinematics')
+
+        n_lj = len(self.left_joint_groups)
+        if n_lj > 0:
+            self._fig_kin_l, self._axs_kin_l = plt.subplots(n_lj, 1, figsize=(15, max(3.0 * n_lj, 5.0)), sharex=True)
+            if n_lj == 1: self._axs_kin_l = [self._axs_kin_l]
+            self._fig_kin_l.suptitle(f'Left Joint Kinematics ({self.mode})', y=0.99)
+            self._fig_kin_l.canvas.manager.set_window_title('Left Kinematics')
+
+        # Phase Diagnostics
         self._fig_phase, self._axs_phase = plt.subplots(3, 1, figsize=(12, 9), sharex=True)
-        self._fig_exc.suptitle(f'Excitations ({self.mode})')
-        self._fig_kin.suptitle('Joint kinematics: actual vs reference')
-        self._fig_phase.suptitle('Phase diagnostics')
-        for fig in (self._fig_exc, self._fig_kin, self._fig_phase):
-            fig.tight_layout()
-            fig.canvas.draw_idle()
-            fig.canvas.flush_events()
+        self._fig_phase.suptitle(f'Phase Diagnostics ({self.mode})', y=0.99)
+        self._fig_phase.canvas.manager.set_window_title('Phase Diagnostics')
+        
+        for fig in (self._fig_exc_r1, self._fig_exc_r2, self._fig_exc_l1, self._fig_exc_l2, 
+                    self._fig_kin_r, self._fig_kin_l, self._fig_phase):
+            if fig is not None:
+                fig.tight_layout()
+                fig.canvas.draw_idle()
+                fig.canvas.flush_events()
 
     def record(self, t: float, info: dict, obs: np.ndarray):
-        self.times.append(float(t))
+        self.last_t = float(t)
+        continuous_t = self.t_offset + self.last_t
+        self.times.append(continuous_t)
+        
         self.phase.append(float(info.get('phase', np.nan)))
         self.theta.append(float(info.get('theta', np.nan)))
         self.phase_drift.append(float(info.get('phase_drift', np.nan)))
         self.phase_rate_hz.append(float(info.get('phase_rate_hz', np.nan)))
         self.ctrl.append(np.asarray(self.env.rsi.data.ctrl, dtype=float).copy())
         self.baseline.append(np.asarray(self.env.core.actions.last_baseline, dtype=float).copy())
+        
         joint_actual = np.asarray(self.env.rsi.data.qpos[7:], dtype=float).copy()
         self.joint_actual.append(joint_actual)
-        # The PPO obs is normalized; do NOT plot obs['reference_joints'] against raw qpos.
-        # Obtain the physical-unit joint reference at the adapted phase directly.
+        
         target = self.env.observations.reference.sample(
             self.env.core.clock.theta, phase_rate=self.env.core.clock.phase_rate_hz)
         self.joint_reference.append(np.asarray(target.qpos[7:], dtype=float).copy())
+        
         if self.plot_live and (len(self.times) == 1 or len(self.times) % self.plot_update_every == 0):
             self.update_live()
-
-    def _draw_excitation_axis(self, ax, side_idxs: list[int], title: str):
-        ax.clear()
-        ax.set_title(title)
-        if not side_idxs or not self.times:
-            ax.text(0.5, 0.5, 'No data for this side', ha='center', va='center', transform=ax.transAxes)
-            return
-        ctrl = np.vstack(self.ctrl)
-        baseline = np.vstack(self.baseline)
-        x = np.asarray(self.times)
-        from matplotlib import pyplot as plt
-        palette = plt.rcParams['axes.prop_cycle'].by_key()['color']
-        for j, idx in enumerate(side_idxs):
-            color = palette[j % len(palette)]
-            ax.plot(x, baseline[:, idx], color=color, alpha=0.32, linestyle='--', linewidth=1.2)
-            ax.plot(x, ctrl[:, idx], color=color, linewidth=1.7, label=self.actuator_names[idx])
-        ax.set_ylabel('excitation')
-        ax.set_ylim(-0.02, 1.02)
-        ax.grid(True, alpha=0.25)
-        if len(side_idxs) <= 14:
-            ax.legend(loc='upper left', bbox_to_anchor=(1.01, 1.0), fontsize=7, ncol=1)
 
     def _draw_kin_axis(self, ax, joint_idxs: list[int], title: str):
         ax.clear()
@@ -414,7 +480,7 @@ class EpisodePlotter:
             qpos_idx = self.joint_qpos_ids[local_idx]
             name = self.joint_names[local_idx]
             color = palette[j % len(palette)]
-            ax.plot(x, ref[:, qpos_idx], color=color, alpha=0.32, linestyle='--', linewidth=1.2)
+            ax.plot(x, ref[:, qpos_idx], color=color, alpha=0.75, linestyle='--', linewidth=1.2)
             ax.plot(x, actual[:, qpos_idx], color=color, linewidth=1.7, label=name)
         ax.set_ylabel('joint position')
         ax.grid(True, alpha=0.25)
@@ -436,7 +502,6 @@ class EpisodePlotter:
         axs[1].grid(True, alpha=0.25)
         axs[2].plot(x, self.phase_rate_hz)
         axs[2].set_ylabel('phase rate (Hz)')
-        axs[2].set_xlabel('time (s)')
         axs[2].grid(True, alpha=0.25)
 
     def _draw_excitation_group_axis(self, ax, idxs: list[int], title: str):
@@ -452,12 +517,71 @@ class EpisodePlotter:
         palette = plt.rcParams['axes.prop_cycle'].by_key()['color']
         for j, idx in enumerate(idxs):
             color = palette[j % len(palette)]
-            ax.plot(x, baseline[:, idx], color=color, alpha=0.32, linestyle='--', linewidth=1.2)
+            ax.plot(x, baseline[:, idx], color=color, alpha=0.75, linestyle='--', linewidth=1.2)
             ax.plot(x, ctrl[:, idx], color=color, linewidth=1.8, label=self.actuator_names[idx])
         ax.set_ylabel('excitation')
         ax.set_ylim(-0.02, 1.02)
         ax.grid(True, alpha=0.25)
         ax.legend(loc='upper left', bbox_to_anchor=(1.01, 1.0), fontsize=7, ncol=1)
+
+    def update_live(self):
+        if not self.plot_live:
+            return
+        
+        if self._fig_exc_r1 is not None:
+            for idx, (group_name, idxs) in enumerate(self.rm_g1):
+                self._draw_excitation_group_axis(self._axs_exc_r1[idx], idxs, f'Right - {group_name}')
+            self._axs_exc_r1[-1].set_xlabel('Continuous Time (s)')
+            self._fig_exc_r1.tight_layout()
+            self._fig_exc_r1.canvas.draw_idle()
+            self._fig_exc_r1.canvas.flush_events()
+
+        if self._fig_exc_r2 is not None:
+            for idx, (group_name, idxs) in enumerate(self.rm_g2):
+                self._draw_excitation_group_axis(self._axs_exc_r2[idx], idxs, f'Right - {group_name}')
+            self._axs_exc_r2[-1].set_xlabel('Continuous Time (s)')
+            self._fig_exc_r2.tight_layout()
+            self._fig_exc_r2.canvas.draw_idle()
+            self._fig_exc_r2.canvas.flush_events()
+
+        if self._fig_exc_l1 is not None:
+            for idx, (group_name, idxs) in enumerate(self.lm_g1):
+                self._draw_excitation_group_axis(self._axs_exc_l1[idx], idxs, f'Left - {group_name}')
+            self._axs_exc_l1[-1].set_xlabel('Continuous Time (s)')
+            self._fig_exc_l1.tight_layout()
+            self._fig_exc_l1.canvas.draw_idle()
+            self._fig_exc_l1.canvas.flush_events()
+
+        if self._fig_exc_l2 is not None:
+            for idx, (group_name, idxs) in enumerate(self.lm_g2):
+                self._draw_excitation_group_axis(self._axs_exc_l2[idx], idxs, f'Left - {group_name}')
+            self._axs_exc_l2[-1].set_xlabel('Continuous Time (s)')
+            self._fig_exc_l2.tight_layout()
+            self._fig_exc_l2.canvas.draw_idle()
+            self._fig_exc_l2.canvas.flush_events()
+
+        if self._fig_kin_r is not None:
+            for idx, (group_name, idxs) in enumerate(self.right_joint_groups):
+                self._draw_kin_axis(self._axs_kin_r[idx], idxs, f'Right Joints - {group_name}')
+            self._axs_kin_r[-1].set_xlabel('Continuous Time (s)')
+            self._fig_kin_r.tight_layout()
+            self._fig_kin_r.canvas.draw_idle()
+            self._fig_kin_r.canvas.flush_events()
+
+        if self._fig_kin_l is not None:
+            for idx, (group_name, idxs) in enumerate(self.left_joint_groups):
+                self._draw_kin_axis(self._axs_kin_l[idx], idxs, f'Left Joints - {group_name}')
+            self._axs_kin_l[-1].set_xlabel('Continuous Time (s)')
+            self._fig_kin_l.tight_layout()
+            self._fig_kin_l.canvas.draw_idle()
+            self._fig_kin_l.canvas.flush_events()
+            
+        if self._fig_phase is not None:
+            self._draw_phase_axes(self._axs_phase)
+            self._axs_phase[-1].set_xlabel('Continuous Time (s)')
+            self._fig_phase.tight_layout()
+            self._fig_phase.canvas.draw_idle()
+            self._fig_phase.canvas.flush_events()
 
     def _save_excitation_side_figure(self, side_label: str, grouped: list[tuple[str, list[int]]], prefix_suffix: str):
         import matplotlib.pyplot as plt
@@ -495,21 +619,6 @@ class EpisodePlotter:
         plt.close(fig)
         return out
 
-    def update_live(self):
-        if not self.plot_live:
-            return
-        self._draw_excitation_axis(self._axs_exc[0], self.right_muscles, 'Right muscles: applied total (solid) vs baseline MEP (faded)')
-        self._draw_excitation_axis(self._axs_exc[1], self.left_muscles, 'Left muscles: applied total (solid) vs baseline MEP (faded)')
-        self._axs_exc[1].set_xlabel('time (s)')
-        self._draw_kin_axis(self._axs_kin[0], self.right_joints, 'Right joints: actual (solid) vs reference (faded)')
-        self._draw_kin_axis(self._axs_kin[1], self.left_joints, 'Left joints: actual (solid) vs reference (faded)')
-        self._axs_kin[1].set_xlabel('time (s)')
-        self._draw_phase_axes(self._axs_phase)
-        for fig in (self._fig_exc, self._fig_kin, self._fig_phase):
-            fig.tight_layout()
-            fig.canvas.draw_idle()
-            fig.canvas.flush_events()
-
     def save(self):
         if not self.plot_save or not self.times:
             return []
@@ -532,6 +641,7 @@ class EpisodePlotter:
 
         fig3, axs3 = plt.subplots(3, 1, figsize=(12, 9), sharex=True)
         self._draw_phase_axes(axs3)
+        axs3[2].set_xlabel('Continuous Time (s)')
         fig3.suptitle('Phase diagnostics')
         fig3.tight_layout()
         p3 = self.prefix.with_name(self.prefix.name + '_phase.png')
@@ -588,7 +698,17 @@ def run(args: argparse.Namespace) -> None:
         print('Plot mode:', args.plot_mode)
 
         with mj.viewer.launch_passive(env.model, env.rsi.data) as viewer:
-            for ep in range(args.episode, args.episode + args.episodes):
+            if args.loop:
+                if old_episodes is not None:
+                    ep_iter = itertools.cycle(range(args.episode, args.episode + args.episodes))
+                else:
+                    ep_iter = itertools.count(args.episode)
+            else:
+                ep_iter = range(args.episode, args.episode + args.episodes)
+
+            plotter = None
+
+            for ep in ep_iter:
                 if not viewer.is_running():
                     break
                 if old_episodes is not None:
@@ -616,10 +736,16 @@ def run(args: argparse.Namespace) -> None:
                 last_info = None
                 next_video_time = 0.0
                 prefix = args.report_dir / f'episode_{ep:02d}_{args.mode.replace("-", "_")}'
-                plotter = EpisodePlotter(env, mj, env.observation_slices, prefix,
-                                         args.mode, args.plot_mode, args.plot_update_every,
-                                         args.plot_max_muscles_per_side, args.plot_max_joints_per_side,
-                                         args.muscles_per_panel)
+                
+                if plotter is None:
+                    plotter = EpisodePlotter(env, mj, env.observation_slices, prefix,
+                                             args.mode, args.plot_mode, args.plot_update_every,
+                                             args.plot_max_muscles_per_side, args.plot_max_joints_per_side,
+                                             args.muscles_per_panel)
+                else:
+                    plotter.prefix = prefix
+                    plotter.mark_episode_end()
+                    
                 try:
                     renderer, writer, camera = init_video(args, mj, env.model, env.rsi.data, pelvis_id)
                     if writer is not None:
@@ -635,7 +761,9 @@ def run(args: argparse.Namespace) -> None:
                         total_reward += float(reward)
                         terms = info['reward_terms']
                         t = float(info['time_s'])
+                        
                         plotter.record(t, info, obs)
+                        
                         row = {
                             'episode': ep, 'time_s': t, 'phase': float(info['phase']),
                             'theta': float(info.get('theta', np.nan)),
@@ -694,8 +822,9 @@ def run(args: argparse.Namespace) -> None:
                     'reset_only_kinematics': True,
                 }
                 prefix.with_suffix('.json').write_text(json.dumps(outcome, indent=2) + '\n', encoding='utf-8')
+                
                 saved_plots = plotter.save()
-                plotter.close()
+                
                 print(f'Saved: {prefix.with_suffix(".csv")}, {prefix.with_suffix(".json")}')
                 for p in saved_plots:
                     print(f'Saved plot: {p}')
@@ -703,6 +832,10 @@ def run(args: argparse.Namespace) -> None:
                     print(f'Saved MP4: {args.record.resolve()}')
                 if viewer.is_running():
                     wait_live(viewer, args.hold_end)
+
+            if plotter is not None:
+                plotter.close()
+
             if args.stay_open and viewer.is_running():
                 print('Final pose will remain in the viewer. Close the viewer window to exit.')
                 while viewer.is_running():

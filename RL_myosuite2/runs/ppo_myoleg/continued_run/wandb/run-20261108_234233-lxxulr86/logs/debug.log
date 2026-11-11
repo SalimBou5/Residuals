@@ -17,3 +17,8 @@ config: {'seed': 42, 'n_envs': 8, 'total_steps_requested': 40000000, 'n_steps': 
 2026-11-08 23:42:38,795 INFO    MainThread:11256 [wandb_run.py:_redirect():2472] Wrapping output streams.
 2026-11-08 23:42:38,795 INFO    MainThread:11256 [wandb_run.py:_redirect():2495] Redirects installed.
 2026-11-08 23:42:38,801 INFO    MainThread:11256 [wandb_init.py:init():1094] run started, returning control to user process
+2026-11-09 11:17:43,902 INFO    MainThread:11256 [wandb_run.py:_finish():2321] finishing run osy1/myoleg-residual-gait/lxxulr86
+2026-11-09 11:17:43,910 INFO    MainThread:11256 [wandb_run.py:_atexit_cleanup():2520] got exitcode: 0
+2026-11-09 11:17:43,910 INFO    MainThread:11256 [wandb_run.py:_restore():2502] restore
+2026-11-09 11:17:43,910 INFO    MainThread:11256 [wandb_run.py:_restore():2508] restore done
+2026-11-09 11:20:03,781 INFO    MainThread:11256 [wandb_run.py:_footer_sync_info():3889] logging synced files

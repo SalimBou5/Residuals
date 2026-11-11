@@ -11,6 +11,9 @@ from pathlib import Path
 
 from smoke_test_mep import build_parser, settings_from_args, run_dynamic_episodes
 
+import argparse
+import os
+os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 
 def main() -> None:
     parser = build_parser()
