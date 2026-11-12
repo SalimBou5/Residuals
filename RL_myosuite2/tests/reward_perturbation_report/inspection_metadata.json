@@ -1,0 +1,8 @@
+{
+  "description": "Static MyoLeg forward kinematics, NO mj_step, NO learned policy",
+  "references_requested": 100,
+  "phase_trials_per_reference": 2,
+  "evaluated_cases": 2400,
+  "failed_resets": [],
+  "note": "Imposed joint perturbations are not physically self-consistent trajectories; these are reward sensitivity checks, not performance forecasts."
+}

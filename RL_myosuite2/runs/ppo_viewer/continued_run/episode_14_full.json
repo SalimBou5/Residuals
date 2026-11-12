@@ -1,0 +1,15 @@
+{
+  "episode": 14,
+  "mode": "full",
+  "checkpoint": "runs\\ppo_myoleg\\continued_run\\final_model.zip",
+  "reference": "C:\\Users\\BoussofaraS\\Documents\\residuals\\RL_myosuite2\\data_refining\\gait_training_clean\\S071\\Trial05\\step01_loopable.npz",
+  "reset_phase": 0.6727308141003642,
+  "seconds": 1.1399999999999852,
+  "steps": 228,
+  "return": 179.14742742568285,
+  "reason": "",
+  "event_sync": true,
+  "tracking_termination": true,
+  "physics_integrated": true,
+  "reset_only_kinematics": true
+}

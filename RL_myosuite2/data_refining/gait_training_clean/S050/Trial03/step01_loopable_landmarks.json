@@ -1,0 +1,22 @@
+{
+  "source": "loopable_references-0.025\\S050\\Trial03\\step01_loopable.npz",
+  "output": "gait_with_landmarks\\S050\\Trial03\\step01_loopable.npz",
+  "pelvis_body": "pelvis",
+  "tracking_sites": [
+    "hip_r",
+    "hip_l",
+    "knee_r",
+    "knee_l",
+    "ankle_r",
+    "ankle_l",
+    "toe_r",
+    "toe_l"
+  ],
+  "num_joint_equalities": 14,
+  "max_source_equality_mismatch_rad_or_m": 0.0011883736361232647,
+  "max_dependent_joint_adjustment_rad_or_m": 0.0011883736361232647,
+  "max_pelvis_relative_site_position_loop_error_m": 1.1102230246251565e-16,
+  "max_pelvis_relative_site_velocity_loop_error_m_s": 6.639133687258436e-14,
+  "max_pelvis_relative_site_angular_velocity_loop_error_rad_s": 2.531308496145357e-13,
+  "note": "Kinematics and FK only; does not prove contact or dynamic feasibility"
+}

@@ -1,0 +1,117 @@
+{
+  "status": "CANDIDATE_ONLY_NOT_DYNAMICS_VALIDATED",
+  "subject": "S043",
+  "trial": "Trial05",
+  "step": "step01",
+  "t0_s": 3.45,
+  "t1_s": 4.48,
+  "frames": 104,
+  "stride_duration_s": 1.0300000000000002,
+  "mean_speed_est_m_s": 1.2283438255852084,
+  "speed_method": "magnitude horizontal OpenSim pelvis displacement / stride duration; not directly measured walking speed",
+  "timing": "original samples and durations preserved; phases added without temporal resampling",
+  "phase_boundary": "dataset right-HS-to-right-HS segmentation, see Boo et al 2025",
+  "events": {
+    "stride_start_right_hs_s": 3.45,
+    "stride_end_right_hs_s": 4.48,
+    "right_hs_boundary_sources": [
+      "dataset_segmentation_right_HS_inferred",
+      "dataset_segmentation_right_HS_inferred"
+    ],
+    "left_hs_time_s": 3.9864117637005596,
+    "left_hs_source": "observed_20N_crossing_cop_labeled",
+    "left_hs_phase_in_right_stride": 0.5207881200976304,
+    "left_toe_off_phase": 0.1,
+    "left_toe_off_source": "ASSUMED_0.1_not_measured",
+    "right_toe_off_phase": 0.6,
+    "right_toe_off_source": "ASSUMED_0.6_not_measured",
+    "observed_right_toe_off_s": [],
+    "observed_left_toe_off_s": []
+  },
+  "contacts_by_plate": {
+    "1": {
+      "starts_loaded": false,
+      "ends_loaded": true,
+      "number_threshold_crossings": 1
+    },
+    "2": {
+      "starts_loaded": false,
+      "ends_loaded": false,
+      "number_threshold_crossings": 0
+    }
+  },
+  "events_warning": "20N crossing only if observable; force plate zero is not foot airborne; foot side from CoP relative to heel/toe markers",
+  "mapping": {
+    "pelvis": "OpenSim intrinsic ZXY; T transform to MuJoCo",
+    "sign_reversed": [
+      "knee_angle_r",
+      "knee_angle_l",
+      "hip_adduction_l",
+      "hip_rotation_l"
+    ],
+    "other_leg_signs": "unchanged",
+    "dependent_knee": "MuJoCo equality polynomials"
+  },
+  "s011_subtalar_flag": false,
+  "max_equality_residual": 0.0,
+  "root_quaternion_sign_unwrap": {
+    "frames_flipped": 0,
+    "max_physical_step_deg": 0.7318720661054283,
+    "method": "flip q[i] to maximize dot with q[i-1] before differentiation"
+  },
+  "independent_joint_limit_warnings": [],
+  "input_sha256": {
+    "joint_mot": "5591a3a974f3d19937555bec1f42f073f8bdd04f96a9172a02fc6ed3d46647d7",
+    "grf_mot": "f2028af053b3747baebe9e2e1343e7a401372408a8d6ff47809adfc61e8e5da0",
+    "trc": "9c998956e87bd92de4b35644428dcd6d1a72f03583c632cbc99019c48906799d"
+  },
+  "heading_alignment": {
+    "original_heading_deg_from_plus_x": 88.65738080148039,
+    "applied_world_z_yaw_deg": 1.3426191985196183,
+    "initial_root_xy_m_in_original_mujoco_frame": [
+      0.13611378,
+      -0.66262801
+    ],
+    "horizontal_displacement_m": 1.265194140352765,
+    "target_direction": "+y",
+    "operation": "Single rigid world-frame yaw per stride; root XY reset to (0,0)",
+    "joint_coordinates_changed": false,
+    "original_grf_and_marker_frame": "Original OpenSim laboratory coordinates (NOT rotated)",
+    "original_events_and_phases": "Unchanged",
+    "qvel": "Recomputed from aligned qpos using MuJoCo mj_differentiatePos",
+    "source_reference_sha256": "d3579a0ac7dd48c3b735c8bd5eab3efaedd76c2f2a49df6e2dcf953ca347ed6e",
+    "source_reference_path": "references_gait120\\S043\\Trial05\\step01.npz",
+    "note": "For comparisons with retained OpenSim-lab marker/GRF coordinates, apply the documented OpenSim-to-MuJoCo basis change and this yaw/origin transform."
+  },
+  "floor_alignment": {
+    "method": "median signed ground-to-stance-foot collision-geom distance",
+    "delta_z_m": -0.011471881770378629,
+    "sample_count_per_foot": 7,
+    "floor_geoms": [
+      "floor"
+    ],
+    "right_foot_geoms": [
+      "r_foot_col1",
+      "r_foot_col3",
+      "r_foot_col4",
+      "r_bofoot_col1",
+      "r_bofoot_col2"
+    ],
+    "left_foot_geoms": [
+      "l_foot_col1",
+      "l_foot_col3",
+      "l_foot_col4",
+      "l_bofoot_col1",
+      "l_bofoot_col2"
+    ],
+    "median_distance_before_m": 0.011471881770378629,
+    "right_median_before_m": 0.013435706735102863,
+    "left_median_before_m": 0.006711476496184206,
+    "right_median_after_m": 0.0019638249647242444,
+    "left_median_after_m": -0.004760405274194407,
+    "max_abs_distance_after_m": 0.006079545589404465,
+    "warnings": [],
+    "foot_clearance_sign": "negative=penetration; positive=separation",
+    "operation": "One constant world-z translation for entire stride; no joint or velocity change"
+  }
+}

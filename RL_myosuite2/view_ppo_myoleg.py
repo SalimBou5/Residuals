@@ -12,10 +12,10 @@ off-screen camera, while the native interactive viewer is also open.
 
 New: optional live/offline diagnostic plots for
 - muscle excitations: applied total control vs MEP baseline
+- muscle activations & forces
 - kinematics: actual nonroot joint positions vs reference joint positions
 - phase: phase, theta, drift and phase-rate history
-
-python view_ppo_myoleg.py --summary "evaluation_resets_10m.json"  --checkpoint "runs\\ppo_myoleg\\ppo_20261108_160227_seed42\\final_model.zip" --episode 7 --speed 0.5 --stay-open --plot-mode save --muscles-per-panel 3
+- knee analysis: dual-axis moment and kinematic tracking with swing phase bounds
 """
 from __future__ import annotations
 
@@ -346,6 +346,10 @@ class EpisodePlotter:
         self.phase_rate_hz = []
         self.ctrl = []
         self.baseline = []
+        
+        self.activation = []
+        self.muscle_force = []
+        
         self.joint_actual = []
         self.joint_reference = []
         self.actuator_names = actuator_names(env, mj)
@@ -360,6 +364,28 @@ class EpisodePlotter:
         self.right_joint_groups = _group_joints(self.joint_names, self.right_joints)
         self.left_joint_groups = _group_joints(self.joint_names, self.left_joints)
         self._init_live()
+        
+        # --- Knee Analysis Setup ---
+        self.knee_r_id = self.mj.mj_name2id(self.env.model, self.mj.mjtObj.mjOBJ_JOINT, 'knee_angle_r')
+        self.knee_l_id = self.mj.mj_name2id(self.env.model, self.mj.mjtObj.mjOBJ_JOINT, 'knee_angle_l')
+        self.knee_r_qadr = self.env.model.jnt_qposadr[self.knee_r_id] if self.knee_r_id >= 0 else -1
+        self.knee_l_qadr = self.env.model.jnt_qposadr[self.knee_l_id] if self.knee_l_id >= 0 else -1
+        self.knee_r_dofadr = self.env.model.jnt_dofadr[self.knee_r_id] if self.knee_r_id >= 0 else -1
+        self.knee_l_dofadr = self.env.model.jnt_dofadr[self.knee_l_id] if self.knee_l_id >= 0 else -1
+
+        self.quad_r = [i for i, n in enumerate(self.actuator_names) if _muscle_group_name(n) == 'Quadriceps' and n.endswith('_r')]
+        self.ham_r = [i for i, n in enumerate(self.actuator_names) if _muscle_group_name(n) == 'Hamstrings' and n.endswith('_r')]
+        self.quad_l = [i for i, n in enumerate(self.actuator_names) if _muscle_group_name(n) == 'Quadriceps' and n.endswith('_l')]
+        self.ham_l = [i for i, n in enumerate(self.actuator_names) if _muscle_group_name(n) == 'Hamstrings' and n.endswith('_l')]
+
+        def get_body_id(name): return self.mj.mj_name2id(self.env.model, self.mj.mjtObj.mjOBJ_BODY, name)
+        self.foot_r_bodies = [get_body_id(n) for n in ('calcn_r', 'toes_r', 'talus_r') if get_body_id(n) >= 0]
+        self.foot_l_bodies = [get_body_id(n) for n in ('calcn_l', 'toes_l', 'talus_l') if get_body_id(n) >= 0]
+
+        self.knee_metrics = {
+            'r': {'tot_mom': [], 'quad_mom': [], 'ham_mom': [], 'q_act': [], 'q_ref': [], 'contact': []},
+            'l': {'tot_mom': [], 'quad_mom': [], 'ham_mom': [], 'q_act': [], 'q_ref': [], 'contact': []}
+        }
 
     def mark_episode_end(self):
         self.t_offset += self.last_t
@@ -452,8 +478,12 @@ class EpisodePlotter:
         self.theta.append(float(info.get('theta', np.nan)))
         self.phase_drift.append(float(info.get('phase_drift', np.nan)))
         self.phase_rate_hz.append(float(info.get('phase_rate_hz', np.nan)))
+        
         self.ctrl.append(np.asarray(self.env.rsi.data.ctrl, dtype=float).copy())
         self.baseline.append(np.asarray(self.env.core.actions.last_baseline, dtype=float).copy())
+        
+        self.activation.append(np.asarray(self.env.rsi.data.act, dtype=float).copy())
+        self.muscle_force.append(np.asarray(self.env.rsi.data.actuator_force, dtype=float).copy())
         
         joint_actual = np.asarray(self.env.rsi.data.qpos[7:], dtype=float).copy()
         self.joint_actual.append(joint_actual)
@@ -462,6 +492,54 @@ class EpisodePlotter:
             self.env.core.clock.theta, phase_rate=self.env.core.clock.phase_rate_hz)
         self.joint_reference.append(np.asarray(target.qpos[7:], dtype=float).copy())
         
+        # --- Record Knee Analysis Metrics ---
+        # 1. Convert sparse actuator moment arms to a dense matrix
+        moment_matrix = np.zeros((self.env.model.nu, self.env.model.nv))
+        self.mj.mju_sparse2dense(
+            moment_matrix,
+            self.env.rsi.data.actuator_moment,
+            self.env.rsi.data.moment_rownnz,
+            self.env.rsi.data.moment_rowadr,
+            self.env.rsi.data.moment_colind,
+        )
+        
+        forces = np.asarray(self.env.rsi.data.actuator_force, dtype=float)
+
+        for side, d_adr, q_adr, q_idx, h_idx, f_bodies in [
+            ('r', self.knee_r_dofadr, self.knee_r_qadr, self.quad_r, self.ham_r, self.foot_r_bodies),
+            ('l', self.knee_l_dofadr, self.knee_l_qadr, self.quad_l, self.ham_l, self.foot_l_bodies)
+        ]:
+            if d_adr >= 0:
+                # 2. Individual actuator contributions (Torque = Moment Arm * Force)
+                moments = moment_matrix[:, d_adr] * forces
+
+                # 3. Your diagnostic prints (Throttled to run ~once per second to prevent console flooding)
+                if side == 'r' and len(self.times) % 50 == 0:
+                    print(f"\n--- Right Knee Diagnostics at t={self.times[-1]:.2f}s ---")
+                    print(f"Calculated: {moments.sum():.4f}")
+                    print(f"MuJoCo Native: {self.env.rsi.data.qfrc_actuator[d_adr]:.4f}")
+                    print("Largest contributors:")
+                    for i in np.argsort(np.abs(moments))[-10:][::-1]:
+                        if moments[i] != 0: # Only print active contributors
+                            print(f"  {self.actuator_names[i]}: {moments[i]:.4f}")
+
+                # 4. Save data for the graphs
+                self.knee_metrics[side]['tot_mom'].append(np.sum(moments))
+                self.knee_metrics[side]['quad_mom'].append(np.sum(moments[q_idx]))
+                self.knee_metrics[side]['ham_mom'].append(np.sum(moments[h_idx]))
+                self.knee_metrics[side]['q_act'].append(self.env.rsi.data.qpos[q_adr])
+                self.knee_metrics[side]['q_ref'].append(target.qpos[q_adr])
+
+                # 5. Check exact MuJoCo contact physics for foot bodies
+                in_contact = 0.0
+                for c_idx in range(self.env.rsi.data.ncon):
+                    con = self.env.rsi.data.contact[c_idx]
+                    g1_body = self.env.model.geom_bodyid[con.geom1]
+                    g2_body = self.env.model.geom_bodyid[con.geom2]
+                    if g1_body in f_bodies or g2_body in f_bodies:
+                        in_contact = 1.0
+                        break
+                self.knee_metrics[side]['contact'].append(in_contact)
         if self.plot_live and (len(self.times) == 1 or len(self.times) % self.plot_update_every == 0):
             self.update_live()
 
@@ -521,6 +599,28 @@ class EpisodePlotter:
             ax.plot(x, ctrl[:, idx], color=color, linewidth=1.8, label=self.actuator_names[idx])
         ax.set_ylabel('excitation')
         ax.set_ylim(-0.02, 1.02)
+        ax.grid(True, alpha=0.25)
+        ax.legend(loc='upper left', bbox_to_anchor=(1.01, 1.0), fontsize=7, ncol=1)
+
+    def _draw_muscle_timeseries_axis(self, ax, idxs: list[int], title: str, data_list: list[np.ndarray], ylabel: str, ylim=None):
+        ax.clear()
+        ax.set_title(title)
+        if not idxs or not self.times:
+            ax.text(0.5, 0.5, 'No data in this group', ha='center', va='center', transform=ax.transAxes)
+            return
+        
+        data_arr = np.vstack(data_list)
+        x = np.asarray(self.times)
+        from matplotlib import pyplot as plt
+        palette = plt.rcParams['axes.prop_cycle'].by_key()['color']
+        
+        for j, idx in enumerate(idxs):
+            color = palette[j % len(palette)]
+            ax.plot(x, data_arr[:, idx], color=color, linewidth=1.8, label=self.actuator_names[idx])
+            
+        ax.set_ylabel(ylabel)
+        if ylim:
+            ax.set_ylim(ylim)
         ax.grid(True, alpha=0.25)
         ax.legend(loc='upper left', bbox_to_anchor=(1.01, 1.0), fontsize=7, ncol=1)
 
@@ -601,6 +701,26 @@ class EpisodePlotter:
         plt.close(fig)
         return out
 
+    def _save_muscle_timeseries_figure(self, side_label: str, grouped: list[tuple[str, list[int]]], prefix_suffix: str, data_list: list[np.ndarray], ylabel: str, title_str: str, ylim=None):
+        import matplotlib.pyplot as plt
+        if not grouped or not self.times:
+            return None
+        n = len(grouped)
+        fig, axs = plt.subplots(n, 1, figsize=(15, max(3.2 * n, 5.0)), sharex=True)
+        if n == 1:
+            axs = [axs]
+            
+        for ax, (group_name, idxs) in zip(axs, grouped):
+            self._draw_muscle_timeseries_axis(ax, idxs, f'{side_label} — {group_name}', data_list, ylabel, ylim)
+            
+        axs[-1].set_xlabel('time (s)')
+        fig.suptitle(title_str, y=0.999)
+        fig.tight_layout(rect=(0, 0, 1, 0.981))
+        out = self.prefix.with_name(self.prefix.name + prefix_suffix)
+        fig.savefig(out, dpi=180, bbox_inches='tight')
+        plt.close(fig)
+        return out
+
     def _save_kinematics_side_figure(self, side_label: str, grouped, prefix_suffix: str):
         import matplotlib.pyplot as plt
         if not grouped or not self.times:
@@ -619,6 +739,49 @@ class EpisodePlotter:
         plt.close(fig)
         return out
 
+    def _save_knee_analysis_figure(self):
+        import matplotlib.pyplot as plt
+        if not self.times or self.knee_r_dofadr < 0:
+            return None
+
+        fig, axs = plt.subplots(2, 1, figsize=(14, 10), sharex=True)
+        x = np.asarray(self.times)
+
+        for ax, side, title in zip(axs, ['r', 'l'], ['Right Knee Dynamics', 'Left Knee Dynamics']):
+            m = self.knee_metrics[side]
+            
+            # Primary Axis: Moments
+            ax.set_title(title)
+            ax.plot(x, m['tot_mom'], color='black', linewidth=2, label='Total Muscle Moment')
+            ax.plot(x, m['quad_mom'], color='tab:blue', linewidth=1.5, label='Quadriceps Contribution')
+            ax.plot(x, m['ham_mom'], color='tab:red', linewidth=1.5, label='Hamstrings Contribution')
+            ax.set_ylabel('Knee Moment (N·m)')
+            ax.grid(True, alpha=0.25)
+            
+            # Secondary Axis: Kinematics
+            ax2 = ax.twinx()
+            ax2.plot(x, m['q_act'], color='tab:green', linewidth=1.8, label='Actual Angle')
+            ax2.plot(x, m['q_ref'], color='tab:green', alpha=0.5, linestyle='--', linewidth=1.5, label='Ref Angle')
+            ax2.set_ylabel('Knee Angle (rad)')
+
+            # Mark Swing Phase (Contact == 0)
+            contact = np.asarray(m['contact'])
+            ax.fill_between(x, ax.get_ylim()[0], ax.get_ylim()[1], where=(contact == 0),
+                            color='gray', alpha=0.15, label='Swing Phase (No Contact)', transform=ax.get_xaxis_transform())
+
+            # Combine legends from both axes
+            lines_1, labels_1 = ax.get_legend_handles_labels()
+            lines_2, labels_2 = ax2.get_legend_handles_labels()
+            ax.legend(lines_1 + lines_2, labels_1 + labels_2, loc='upper left', bbox_to_anchor=(1.08, 1.0), fontsize=8)
+
+        axs[-1].set_xlabel('Continuous Time (s)')
+        fig.tight_layout(rect=(0, 0, 0.85, 1))
+        
+        out = self.prefix.with_name(self.prefix.name + '_knee_analysis.png')
+        fig.savefig(out, dpi=180, bbox_inches='tight')
+        plt.close(fig)
+        return out
+
     def save(self):
         if not self.plot_save or not self.times:
             return []
@@ -626,18 +789,30 @@ class EpisodePlotter:
         saved = []
 
         p = self._save_excitation_side_figure('Right side', self.right_muscle_groups, '_excitations_right.png')
-        if p is not None:
-            saved.append(p)
+        if p is not None: saved.append(p)
         p = self._save_excitation_side_figure('Left side', self.left_muscle_groups, '_excitations_left.png')
-        if p is not None:
-            saved.append(p)
+        if p is not None: saved.append(p)
+        
+        # New Activation Saves
+        p = self._save_muscle_timeseries_figure('Right side', self.right_muscle_groups, '_activations_right.png', self.activation, 'activation', 'Right Side Muscle Activations', ylim=(-0.02, 1.02))
+        if p is not None: saved.append(p)
+        p = self._save_muscle_timeseries_figure('Left side', self.left_muscle_groups, '_activations_left.png', self.activation, 'activation', 'Left Side Muscle Activations', ylim=(-0.02, 1.02))
+        if p is not None: saved.append(p)
+        
+        # New Force Saves
+        p = self._save_muscle_timeseries_figure('Right side', self.right_muscle_groups, '_forces_right.png', self.muscle_force, 'force (N)', 'Right Side Muscle Forces')
+        if p is not None: saved.append(p)
+        p = self._save_muscle_timeseries_figure('Left side', self.left_muscle_groups, '_forces_left.png', self.muscle_force, 'force (N)', 'Left Side Muscle Forces')
+        if p is not None: saved.append(p)
 
         p = self._save_kinematics_side_figure('Right side', self.right_joint_groups, '_kinematics_right.png')
-        if p is not None:
-            saved.append(p)
+        if p is not None: saved.append(p)
         p = self._save_kinematics_side_figure('Left side', self.left_joint_groups, '_kinematics_left.png')
-        if p is not None:
-            saved.append(p)
+        if p is not None: saved.append(p)
+        
+        # New Knee Dynamics Saves
+        p = self._save_knee_analysis_figure()
+        if p is not None: saved.append(p)
 
         fig3, axs3 = plt.subplots(3, 1, figsize=(12, 9), sharex=True)
         self._draw_phase_axes(axs3)

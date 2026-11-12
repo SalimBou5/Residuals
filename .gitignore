@@ -1,1 +1,9 @@
 *.npz
+*.npz
+*.zip
+*.trc
+*.mot
+*.png
+*.mp4
+*.pdf
+*.wandb

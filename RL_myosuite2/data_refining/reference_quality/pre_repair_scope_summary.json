@@ -1,0 +1,13 @@
+{
+  "source": "Uploaded mtp_spikes.csv, reference_summary(1).csv, proposed_root_patches.csv",
+  "scope": "PRE-REPAIR (the MTP overlay has not yet been generated on the user local library)",
+  "total_references": 969,
+  "root_seam_excluded_references": 17,
+  "retained_references": 952,
+  "highest_retained_original_root_speed_m_s": 2.646244318259577,
+  "retained_original_root_peaks_over_3_m_s": 0,
+  "mtp_spike_frames_before_exclusion": 170,
+  "mtp_spike_frames_after_exclusion_before_smoothing": 168,
+  "references_with_mtp_spikes_after_exclusion_before_smoothing": 90,
+  "warning": "The actual count of repaired intervals and post-repair velocity extrema must be measured by the user on the full source library with their MyoLeg model."
+}

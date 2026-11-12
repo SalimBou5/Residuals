@@ -10,7 +10,7 @@ Use --plots-at-end for an explicitly offline plot mode: only the MuJoCo
 viewer runs during replay. After the requested cycles end (or the user closes
 the viewer), joint and landmark plots are saved and shown. No live plotting.
 
-python replay_loopable_gait_with_events_offline.py --model "C:\\Users\\BoussofaraS\\Downloads\\myo_sim\\myo_sim\\leg\\myolegs.xml" --cycles 10 --speed 0.5 --reference "gait_with_landmarks\\S060\\Trial01\\step01_loopable.npz" --plots-at-end --all-cycles --noise-deg 1 --noise-seed 42 --noise-cutoff-hz 20
+python replay_loopable_gait_with_events.py --model "C:\\Users\\BoussofaraS\\Downloads\\myo_sim\\myo_sim\\leg\\myolegs.xml" --cycles 10 --speed 0.5 --reference "gait_with_landmarks\\S060\\Trial01\\step01_loopable.npz" --plots-at-end --all-cycles --noise-deg 1 --noise-seed 42 --noise-cutoff-hz 20
 
 Requires: numpy, matplotlib, mujoco, glfw (usually installed with mujoco).
 """

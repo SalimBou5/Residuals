@@ -1,0 +1,399 @@
+{
+  "source": "offline inspection of RAW Step-4 imposed reference poses; not an RL rollout",
+  "references": 944,
+  "samples": 23600,
+  "nominal_policy_action": "zero muscle residual, zero RL phase rate",
+  "reference_velocity_target": "identical to imposed qvel under nominal phase rate (no perturbation)",
+  "activation_source": "periodic RSI lookup, 70 mapped; 10 disabled zero; L1/L2 divided by 80",
+  "speed_approximation": "world +Y reconstructed from local pelvis velocity (confirmed by sample reference stride displacement); online reward uses per-reference stride direction",
+  "inaccessible_from_reference_only": [
+    "gait recovery/late falls",
+    "policy residual behavior",
+    "dynamic activation responses",
+    "event/phase correction",
+    "non-reference contact forces",
+    "true site errors after policy deviates"
+  ],
+  "warning": "Scores near 1 on imposed trajectories DO NOT validate reward temperatures or weight priorities. Review the synthetic sensitivity table and run dynamic rollouts after implementing policy.",
+  "calibration_config": {
+    "beta_joint_position": 30.806541358219793,
+    "beta_joint_velocity": 0.17328679513998632,
+    "beta_site_position": 192.5408834888737,
+    "beta_site_orientation": 17.32867951399863,
+    "beta_site_linear_velocity": 2.772588722239781,
+    "beta_site_angular_velocity": 0.17328679513998632,
+    "beta_speed": 5.658344331101595,
+    "beta_upright": 5.173720989945671,
+    "w_joint_position": 0.2,
+    "w_joint_velocity": 0.1,
+    "w_site_position": 0.28,
+    "w_site_orientation": 0.14,
+    "w_site_linear_velocity": 0.18,
+    "w_site_angular_velocity": 0.1,
+    "w_speed": 0.2,
+    "w_upright": 0.2,
+    "lambda_residual": 0.5,
+    "lambda_phase": 0.05,
+    "lambda_activation_l1": 0.03,
+    "lambda_activation_l2": 0.02,
+    "residual_muscle_weights": null,
+    "upright_body_name": "pelvis",
+    "upright_local_axis": [
+      0.0,
+      1.0,
+      0.0
+    ]
+  },
+  "summary": {
+    "reward_nominal": {
+      "min": 1.1799962934280015,
+      "p01": 1.2803638592516349,
+      "p05": 1.3222855806728913,
+      "median": 1.3776516368324114,
+      "mean": 1.3699413492153534,
+      "p95": 1.3931542144681808,
+      "p99": 1.3949814210491969,
+      "max": 1.39608509750211
+    },
+    "speed_y_proxy_m_s": {
+      "min": 0.30698451817575717,
+      "p01": 0.8653355980306283,
+      "p05": 1.01340164288541,
+      "median": 1.294661217153219,
+      "mean": 1.301287399355832,
+      "p95": 1.6395268327408425,
+      "p99": 1.7759250984377757,
+      "max": 1.9860141287835464
+    },
+    "desired_speed_m_s": {
+      "min": 0.9331861734390259,
+      "p01": 1.0125267505645752,
+      "p05": 1.0883787870407104,
+      "median": 1.2881349325180054,
+      "mean": 1.2957923508927984,
+      "p95": 1.5029631853103638,
+      "p99": 1.590205430984497,
+      "max": 1.641144871711731
+    },
+    "speed_error_y_proxy_m_s": {
+      "min": -1.089728629120644,
+      "p01": -0.21984381126207903,
+      "p05": -0.1537662437072756,
+      "median": -0.03440697747631205,
+      "mean": 0.005495048463033672,
+      "p95": 0.25748498468137515,
+      "p99": 0.3116383391976816,
+      "max": 0.43501160680290485
+    },
+    "upright_dot": {
+      "min": 0.9540983223356889,
+      "p01": 0.9700279888545719,
+      "p05": 0.9793250904879225,
+      "median": 0.9957587957078751,
+      "mean": 0.9936227931231574,
+      "p95": 0.9996417983489013,
+      "p99": 0.9999263261215227,
+      "max": 0.9999995855332031
+    },
+    "error_joint_position": {
+      "min": 0.0,
+      "p01": 0.0,
+      "p05": 0.0,
+      "median": 0.0,
+      "mean": 0.0,
+      "p95": 0.0,
+      "p99": 0.0,
+      "max": 0.0
+    },
+    "error_joint_velocity": {
+      "min": 0.0,
+      "p01": 0.0,
+      "p05": 0.0,
+      "median": 0.0,
+      "mean": 0.0,
+      "p95": 0.0,
+      "p99": 0.0,
+      "max": 0.0
+    },
+    "error_site_position": {
+      "min": 0.0,
+      "p01": 0.0,
+      "p05": 0.0,
+      "median": 0.0,
+      "mean": 0.0,
+      "p95": 0.0,
+      "p99": 0.0,
+      "max": 0.0
+    },
+    "error_site_linear_velocity": {
+      "min": 0.0,
+      "p01": 0.0,
+      "p05": 0.0,
+      "median": 0.0,
+      "mean": 0.0,
+      "p95": 0.0,
+      "p99": 0.0,
+      "max": 0.0
+    },
+    "error_site_angular_velocity": {
+      "min": 0.0,
+      "p01": 0.0,
+      "p05": 0.0,
+      "median": 0.0,
+      "mean": 0.0,
+      "p95": 0.0,
+      "p99": 0.0,
+      "max": 0.0
+    },
+    "error_site_orientation": {
+      "min": 0.0,
+      "p01": 0.0,
+      "p05": 0.0,
+      "median": 3.3306690738754696e-16,
+      "mean": 3.3234243982063053e-16,
+      "p95": 7.771561172376096e-16,
+      "p99": 9.992007221626409e-16,
+      "max": 1.5543122344752194e-15
+    },
+    "score_joint_position": {
+      "min": 1.0,
+      "p01": 1.0,
+      "p05": 1.0,
+      "median": 1.0,
+      "mean": 1.0,
+      "p95": 1.0,
+      "p99": 1.0,
+      "max": 1.0
+    },
+    "score_joint_velocity": {
+      "min": 1.0,
+      "p01": 1.0,
+      "p05": 1.0,
+      "median": 1.0,
+      "mean": 1.0,
+      "p95": 1.0,
+      "p99": 1.0,
+      "max": 1.0
+    },
+    "score_site_position": {
+      "min": 1.0,
+      "p01": 1.0,
+      "p05": 1.0,
+      "median": 1.0,
+      "mean": 1.0,
+      "p95": 1.0,
+      "p99": 1.0,
+      "max": 1.0
+    },
+    "score_site_linear_velocity": {
+      "min": 1.0,
+      "p01": 1.0,
+      "p05": 1.0,
+      "median": 1.0,
+      "mean": 1.0,
+      "p95": 1.0,
+      "p99": 1.0,
+      "max": 1.0
+    },
+    "score_site_angular_velocity": {
+      "min": 1.0,
+      "p01": 1.0,
+      "p05": 1.0,
+      "median": 1.0,
+      "mean": 1.0,
+      "p95": 1.0,
+      "p99": 1.0,
+      "max": 1.0
+    },
+    "score_site_orientation": {
+      "min": 0.999999999999973,
+      "p01": 0.9999999999999827,
+      "p05": 0.9999999999999866,
+      "median": 0.9999999999999942,
+      "mean": 0.9999999999999943,
+      "p95": 1.0,
+      "p99": 1.0,
+      "max": 1.0
+    },
+    "score_speed": {
+      "min": 0.0012073445655046379,
+      "p01": 0.46747920739755383,
+      "p05": 0.6694800682571257,
+      "median": 0.9423395281548186,
+      "mean": 0.9021790813163443,
+      "p95": 0.9992588145980831,
+      "p99": 0.9999998374248529,
+      "max": 0.9999999999987429
+    },
+    "score_upright": {
+      "min": 0.7886107126778004,
+      "p01": 0.8563579512175817,
+      "p05": 0.898556031730198,
+      "median": 0.978296184491434,
+      "mean": 0.9680822166328412,
+      "p95": 0.998148480779709,
+      "p99": 0.9996189045438428,
+      "max": 0.9999978556667324
+    },
+    "cost_activation_l1": {
+      "min": 0.10350300504360348,
+      "p01": 0.10504225345794112,
+      "p05": 0.10585004347376525,
+      "median": 0.1182365727116121,
+      "mean": 0.1193795760758905,
+      "p95": 0.13438679183600472,
+      "p99": 0.13494153034407647,
+      "max": 0.13589226291514933
+    },
+    "cost_activation_l2": {
+      "min": 0.01958477565399602,
+      "p01": 0.019941636494640258,
+      "p05": 0.020117838389119902,
+      "median": 0.027178458243707626,
+      "mean": 0.02647615461030633,
+      "p95": 0.03161811527805249,
+      "p99": 0.031849743996096316,
+      "max": 0.032199676319631776
+    },
+    "cost_residual": {
+      "min": 0.0,
+      "p01": 0.0,
+      "p05": 0.0,
+      "median": 0.0,
+      "mean": 0.0,
+      "p95": 0.0,
+      "p99": 0.0,
+      "max": 0.0
+    },
+    "cost_phase": {
+      "min": 0.0,
+      "p01": 0.0,
+      "p05": 0.0,
+      "median": 0.0,
+      "mean": 0.0,
+      "p95": 0.0,
+      "p99": 0.0,
+      "max": 0.0
+    },
+    "contribution_joint_position": {
+      "min": 0.2,
+      "p01": 0.2,
+      "p05": 0.2,
+      "median": 0.2,
+      "mean": 0.2,
+      "p95": 0.2,
+      "p99": 0.2,
+      "max": 0.2
+    },
+    "contribution_joint_velocity": {
+      "min": 0.1,
+      "p01": 0.1,
+      "p05": 0.1,
+      "median": 0.1,
+      "mean": 0.1,
+      "p95": 0.1,
+      "p99": 0.1,
+      "max": 0.1
+    },
+    "contribution_site_position": {
+      "min": 0.28,
+      "p01": 0.28,
+      "p05": 0.28,
+      "median": 0.28,
+      "mean": 0.2800000000000001,
+      "p95": 0.28,
+      "p99": 0.28,
+      "max": 0.28
+    },
+    "contribution_site_linear_velocity": {
+      "min": 0.18,
+      "p01": 0.18,
+      "p05": 0.18,
+      "median": 0.18,
+      "mean": 0.17999999999999997,
+      "p95": 0.18,
+      "p99": 0.18,
+      "max": 0.18
+    },
+    "contribution_site_angular_velocity": {
+      "min": 0.1,
+      "p01": 0.1,
+      "p05": 0.1,
+      "median": 0.1,
+      "mean": 0.1,
+      "p95": 0.1,
+      "p99": 0.1,
+      "max": 0.1
+    },
+    "contribution_site_orientation": {
+      "min": 0.13999999999999624,
+      "p01": 0.1399999999999976,
+      "p05": 0.13999999999999813,
+      "median": 0.1399999999999992,
+      "mean": 0.13999999999999918,
+      "p95": 0.14,
+      "p99": 0.14,
+      "max": 0.14
+    },
+    "contribution_speed": {
+      "min": 0.00024146891310092758,
+      "p01": 0.09349584147951077,
+      "p05": 0.13389601365142514,
+      "median": 0.18846790563096372,
+      "mean": 0.1804358162632689,
+      "p95": 0.19985176291961662,
+      "p99": 0.1999999674849706,
+      "max": 0.1999999999997486
+    },
+    "contribution_upright": {
+      "min": 0.15772214253556008,
+      "p01": 0.17127159024351638,
+      "p05": 0.17971120634603963,
+      "median": 0.1956592368982868,
+      "mean": 0.19361644332656824,
+      "p95": 0.19962969615594178,
+      "p99": 0.19992378090876858,
+      "max": 0.1999995711333465
+    },
+    "penalty_activation_l1": {
+      "min": 0.003105090151308104,
+      "p01": 0.0031512676037382336,
+      "p05": 0.0031755013042129576,
+      "median": 0.003547097181348363,
+      "mean": 0.003581387282276715,
+      "p95": 0.0040316037550801416,
+      "p99": 0.004048245910322294,
+      "max": 0.00407676788745448
+    },
+    "penalty_activation_l2": {
+      "min": 0.0003916955130799204,
+      "p01": 0.00039883272989280516,
+      "p05": 0.000402356767782398,
+      "median": 0.0005435691648741526,
+      "mean": 0.0005295230922061266,
+      "p95": 0.0006323623055610499,
+      "p99": 0.0006369948799219263,
+      "max": 0.0006439935263926356
+    },
+    "penalty_residual": {
+      "min": 0.0,
+      "p01": 0.0,
+      "p05": 0.0,
+      "median": 0.0,
+      "mean": 0.0,
+      "p95": 0.0,
+      "p99": 0.0,
+      "max": 0.0
+    },
+    "penalty_phase": {
+      "min": 0.0,
+      "p01": 0.0,
+      "p05": 0.0,
+      "median": 0.0,
+      "mean": 0.0,
+      "p95": 0.0,
+      "p99": 0.0,
+      "max": 0.0
+    }
+  }
+}

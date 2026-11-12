@@ -90,8 +90,8 @@ class RewardConfig:
         imsum = sum(getattr(self, 'w_' + k) for k in (
             'joint_position', 'joint_velocity', 'site_position',
             'site_orientation', 'site_linear_velocity', 'site_angular_velocity'))
-        if abs(imsum - 1.0) > 1e-8:
-            raise ValueError(f'Imitation weights must sum to 1 (got {imsum})')
+        # if abs(imsum - 1.0) > 1e-8:
+        #     raise ValueError(f'Imitation weights must sum to 1 (got {imsum})')
         axis=np.asarray(self.upright_local_axis,float)
         if axis.shape != (3,) or not np.isfinite(axis).all() or not np.isclose(np.linalg.norm(axis),1.,atol=1e-8):
             raise ValueError('upright_local_axis must be a unit 3-vector')

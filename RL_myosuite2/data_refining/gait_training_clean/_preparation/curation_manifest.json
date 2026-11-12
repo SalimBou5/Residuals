@@ -1,0 +1,42 @@
+{
+  "format_version": 1,
+  "created_at_utc": "2026-11-08T08:51:23.679615+00:00",
+  "source_quality_manifest_sha256": "1f09eb65e1a2858ba5f1ec2aaf63a4276d71ecb81fd1f72f91d282a0908df7bd",
+  "source_complete_changes_sha256": "2759b5e425860121806fa17f8439fb0b65f385116bdb07bb76f36130d1e14b6a",
+  "exclude_unresolved_requested": true,
+  "root_seam_exclusions": [
+    "S027/Trial01/step01_loopable.npz",
+    "S027/Trial02/step01_loopable.npz",
+    "S052/Trial01/step02_loopable.npz",
+    "S063/Trial04/step01_loopable.npz",
+    "S066/Trial01/step01_loopable.npz",
+    "S071/Trial03/step01_loopable.npz",
+    "S078/Trial02/step01_loopable.npz",
+    "S079/Trial01/step01_loopable.npz",
+    "S079/Trial02/step01_loopable.npz",
+    "S085/Trial02/step01_loopable.npz",
+    "S099/Trial02/step01_loopable.npz",
+    "S102/Trial05/step01_loopable.npz",
+    "S105/Trial03/step01_loopable.npz",
+    "S114/Trial05/step01_loopable.npz",
+    "S116/Trial01/step01_loopable.npz",
+    "S116/Trial03/step01_loopable.npz",
+    "S120/Trial02/step01_loopable.npz"
+  ],
+  "approved_unresolved_mtp_exclusions": [
+    "S016/Trial03/step02_loopable.npz",
+    "S016/Trial05/step01_loopable.npz",
+    "S019/Trial02/step01_loopable.npz",
+    "S033/Trial03/step01_loopable.npz",
+    "S033/Trial04/step01_loopable.npz",
+    "S033/Trial05/step01_loopable.npz",
+    "S033/Trial05/step02_loopable.npz",
+    "S053/Trial03/step02_loopable.npz"
+  ],
+  "original_reference_count": 969,
+  "retained_reference_count": 944,
+  "root_seam_excluded_count": 17,
+  "unresolved_mtp_excluded_count": 8,
+  "patched_count": 165,
+  "unchanged_count": 779
+}

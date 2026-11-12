@@ -1,0 +1,10 @@
+{
+  "min_pelvis_height_m": 0.55,
+  "min_upright_dot": 0.0,
+  "max_mean_site_error_m": 0.5,
+  "max_world_root_error_m": 1.0,
+  "max_root_orientation_error_rad": 1.5,
+  "tracking_grace_control_steps": 5,
+  "enable_tracking_termination": true,
+  "enable_physical_termination": true
+}

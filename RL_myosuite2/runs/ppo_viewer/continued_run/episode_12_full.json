@@ -1,0 +1,15 @@
+{
+  "episode": 12,
+  "mode": "full",
+  "checkpoint": "runs\\ppo_myoleg\\continued_run\\final_model.zip",
+  "reference": "C:\\Users\\BoussofaraS\\Documents\\residuals\\RL_myosuite2\\data_refining\\gait_training_clean\\S113\\Trial01\\step02_loopable.npz",
+  "reset_phase": 0.5192340296297115,
+  "seconds": 1.2349999999999748,
+  "steps": 247,
+  "return": 206.29920204533477,
+  "reason": "pelvis_too_low",
+  "event_sync": true,
+  "tracking_termination": true,
+  "physics_integrated": true,
+  "reset_only_kinematics": true
+}
