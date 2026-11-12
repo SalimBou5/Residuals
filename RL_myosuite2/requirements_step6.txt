@@ -1,6 +1,0 @@
-# Install in the SAME environment where your Step 5 files already work.
-# This is an add-on: use your existing NumPy, SciPy, and MuJoCo installation.
-gymnasium>=1.0,<2
-stable-baselines3>=2.5,<3
-wandb>=0.19,<1
-torch>=2.2

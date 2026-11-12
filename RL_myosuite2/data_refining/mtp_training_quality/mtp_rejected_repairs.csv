@@ -1,9 +1,0 @@
-relative_reference,side,trigger_frames,reasons,attempted_candidates,first_candidate_angle_change_rad,first_candidate_interval_fraction,first_candidate_max_velocity_rad_s,accepted_patch
-S016/Trial03/step02_loopable.npz,r,4,max_angle_change_exceeded;max_interval_fraction_exceeded,9,0.3197513105903057,0.1836734693877551,1.433316967841157,False
-S016/Trial05/step01_loopable.npz,r,4,max_angle_change_exceeded;max_interval_fraction_exceeded,9,0.34174661187304267,0.1836734693877551,2.3210137922880083,False
-S019/Trial02/step01_loopable.npz,r,4,max_angle_change_exceeded;max_interval_fraction_exceeded,9,0.33415414468417476,0.20192307692307693,1.7907143209263772,False
-S033/Trial03/step01_loopable.npz,r,6,max_angle_change_exceeded;max_interval_fraction_exceeded,9,0.2197659293562144,0.08333333333333333,6.710850207644238,False
-S033/Trial04/step01_loopable.npz,r,7,max_angle_change_exceeded;max_interval_fraction_exceeded,9,0.25958388181886527,0.1415929203539823,5.680828760702444,False
-S033/Trial05/step01_loopable.npz,r,5,max_angle_change_exceeded;max_interval_fraction_exceeded,9,0.2066539360538052,0.08520179372197309,6.73711033725539,False
-S033/Trial05/step02_loopable.npz,r,6,max_angle_change_exceeded;max_interval_fraction_exceeded,9,0.2824817978685468,0.17105263157894737,8.951615732025283,False
-S053/Trial03/step02_loopable.npz,r,2,max_angle_change_exceeded;max_interval_fraction_exceeded,9,0.2342347193477351,0.10747663551401869,5.097803604544587,False
